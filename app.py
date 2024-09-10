@@ -8,7 +8,8 @@ import MySQLdb
 import mysql.connector
 import pytz
 from werkzeug.utils import secure_filename
-
+import pymysql
+pymysql.install_as_MySQLdb()
 local_tz = pytz.timezone('Asia/Jerusalem')
 
 app = Flask(__name__)
