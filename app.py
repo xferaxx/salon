@@ -9,7 +9,10 @@ import mysql.connector
 import pytz
 from werkzeug.utils import secure_filename
 import pymysql
+
 pymysql.install_as_MySQLdb()
+SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root@localhost/salon'
+
 local_tz = pytz.timezone('Asia/Jerusalem')
 
 app = Flask(__name__)
