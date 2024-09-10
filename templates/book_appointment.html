@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Appointment</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Book an Appointment at {{ shop_name }}</h1>
+    </header>
+    <main>
+        <form method="POST" action="/book/{{ shop_id }}">
+            <!-- Date selection -->
+            <label for="appointment_date">Choose Appointment Date:</label>
+            <input type="datetime-local" id="appointment_date" name="appointment_date" required>
+
+            <!-- Service selection -->
+            <label for="service_id">Select Service:</label>
+            <select id="service_id" name="service_id" required>
+                {% for service in services %}
+                <option value="{{ service[0] }}">{{ service[1] }} - ${{ service[2] }}</option>
+                {% endfor %}
+            </select>
+
+            <button type="submit">Book Appointment</button>
+            <button type="button" onclick="goBack()">Back</button>
+        </form>
+    </main>
+    <footer>
+        <p>&copy; 2024 Salon Booking System</p>
+    </footer>
+<script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+</body>
+</html>

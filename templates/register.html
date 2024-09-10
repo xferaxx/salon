@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Register for Salon Booking</h1>
+    </header>
+    <main>
+        <form method="POST" action="/register" enctype="multipart/form-data">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" required>
+
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required>
+
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="role">I am a:</label>
+            <select id="role" name="role" required>
+                <option value="customer">Customer</option>
+                <option value="shop_owner">Shop Owner</option>
+            </select>
+
+            <!-- Add Profile Picture Upload Field -->
+            <label for="profile_picture">Profile Picture</label>
+            <input type="file" id="profile_picture" name="profile_picture" accept="image/*">
+
+            <button type="submit">Register</button>
+            <button type="button" onclick="goBack()">Back</button>
+        </form>
+    </main>
+    <footer>
+        <p>&copy; 2024 Salon Booking System</p>
+    </footer>
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+</body>
+</html>

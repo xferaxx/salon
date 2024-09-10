@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Admin Panel - Approve Shops</h1>
+    </header>
+    <main>
+        <h2>Shops Pending Approval</h2>
+        <ul>
+            {% for shop in unapproved_shops %}
+            <li>
+                <h3>{{ shop[1] }}</h3> <!-- Shop name -->
+                <p>{{ shop[2] }}</p> <!-- Shop address -->
+                <p>{{ shop[3] }}</p> <!-- Shop phone -->
+                <form method="POST" action="/approve_shop/{{ shop[0] }}">
+                    <button type="submit">Approve</button>
+                </form>
+
+            </li>
+            {% else %}
+            <li>No shops pending approval.</li>
+            {% endfor %}
+
+        </ul>
+        <button type="button" onclick="goBack()">Back</button>
+    </main>
+    <footer>
+        <p>&copy; 2024 Salon Booking System</p>
+    </footer>
+ <script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+</body>
+</html>

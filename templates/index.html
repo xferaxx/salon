@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salon & Beauty Shop</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Salon & Beauty Shop Center</h1>
+        <nav>
+            <a href="/register" class="btn">Register</a>
+            <a href="/login" class="btn">Login</a>
+        </nav>
+    </header>
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <h2>Welcome</h2>
+                <h2>Your Beauty, Our Passion</h2>
+                <h1>Book an appointment with the best salons in town for a delightful beauty experience. Choose from a wide range of services to look and feel your best.</h1>
+                <a href="/register" class="btn-primary">Get Started</a>
+            </div>
+        </section>
+
+        <section class="services">
+            <h2>Our Services</h2>
+            <div class="service-grid">
+                <div class="service">
+                    <img src="{{ url_for('static', filename='images/hair.png') }}" alt="Hair Styling">
+                    <h3>Hair Styling</h3>
+                    <p>Get a fresh haircut or style that matches your personality.</p>
+                </div>
+                <div class="service">
+                    <img src="{{ url_for('static', filename='images/nails.png') }}" alt="Nail Services">
+                    <h3>Nail Services</h3>
+                    <p>Manicure, pedicure, and nail art designed to make you stand out.</p>
+                </div>
+                <div class="service">
+                    <img src="{{ url_for('static', filename='images/spa.png') }}" alt="Spa Treatments">
+                    <h3>Spa Treatments</h3>
+                    <p>Relax and unwind with our luxurious spa services.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 Salon & Beauty Shop Appointment System</p>
+    </footer>
+</body>
+</html>

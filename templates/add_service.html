@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Service</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Add a New Service</h1>
+    </header>
+    <main>
+        <form method="POST" action="/add_service">
+            <label for="shop_id">Select Shop:</label>
+            <select id="shop_id" name="shop_id" required>
+                {% for shop in shops %}
+                <option value="{{ shop[0] }}">{{ shop[1] }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="service_name">Service Name:</label>
+            <input type="text" id="service_name" name="service_name" required>
+
+            <label for="price">Price:</label>
+            <input type="number" step="0.01" id="price" name="price" required>
+
+            <label for="duration">Duration (minutes):</label>
+            <input type="number" id="duration" name="duration" required>
+
+            <button type="submit">Add Service</button>
+            <!-- Back button -->
+            <button type="button" onclick="goBack()">Back</button>
+        </form>
+    </main>
+    <footer>
+        <p>&copy; 2024 Salon Booking System</p>
+    </footer>
+<script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+</body>
+</html>

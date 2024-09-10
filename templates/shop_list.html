@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shops List</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Available Shops</h1>
+    </header>
+    <main>
+        <ul>
+    {% for shop in shops %}
+    <li>
+
+        <h3>{{ shop[1] }}</h3> <!-- Shop name -->
+        <p>{{ shop[2] }}</p> <!-- Shop address -->
+        <p>{{ shop[3] }}</p> <!-- Shop phone -->
+        <a href="/book/{{ shop[0] }}">Book Appointment</a> <!-- Shop ID -->
+        <p>Shop ID: {{ shop[0] }}</p> <!-- For debugging -->
+    </li>
+    {% endfor %}
+</ul>
+        <button type="button" onclick="goBack()">Back</button>
+
+
+    </main>
+    <footer>
+        <p>&copy; 2024 Salon Booking System</p>
+    </footer>
+ <script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+</body>
+</html>

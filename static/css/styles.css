@@ -1,0 +1,393 @@
+/* General Styles */
+body {
+    font-family: 'Georgia', serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f7f1e3;
+    color: #333;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Header Styling */
+header {
+    background-color: #f5d3c1;
+    color: #5a5a5a;
+    text-align: center;
+    padding: 1.5em;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: relative;
+    display: flex;
+    justify-content: space-between; /* This will space out items in the header */
+    align-items: center; /* Vertically center the items */
+
+}
+
+header h1 {
+    font-size: 2rem;
+    font-weight: bold;
+    margin: 0;
+    color: #333;
+}
+
+
+.header-right {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.welcome-message {
+    margin-right: 20px; /* Space between the welcome message and the logout button */
+    font-size: 1.2rem;
+    color: #4C3B3F;
+}
+
+#profile picture
+.profile-section img {
+    width: 20px; /* Set the size of the image */
+    height: 20px; /* Make the image a square */
+    border-radius: 30%; /* Make the image circular */
+    object-fit: cover; /* Ensure the image is scaled to fit inside the circle */
+    border: 2px solid #4C3B3F; /* Optional: Add a border to the image */
+}
+
+nav {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+}
+
+nav .btn {
+    background-color: #D9B2A1;
+    color: black;
+    padding: 10px 20px;
+    border-radius: 30px;
+    margin-left: 10px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+nav .btn:hover {
+    background-color: #d9b2a1;
+}
+
+/* Hero Section */
+.hero {
+    background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('{{ url_for('static', filename='images/beauty-background.jpg') }}') no-repeat center center/cover;
+    height: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    text-align: center;
+}
+
+.hero-content h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.hero-content p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+}
+
+.hero .btn-primary {
+    background-color: #cc7351;
+    padding: 12px 24px;
+    color: white;
+    border-radius: 30px;
+    font-size: 1.2rem;
+    text-decoration: none;
+}
+
+.hero .btn-primary:hover {
+    background-color: #b36544;
+}
+
+/* Services Section */
+.services {
+    padding: 2em;
+    background-color: #fff;
+}
+
+.services h2 {
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 2rem;
+    color: #5a5a5a;
+}
+
+.service-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2em;
+    text-align: center;
+}
+
+.service img {
+    width: 100%;
+    border-radius: 10px;
+    transition: transform 0.3s ease;
+}
+
+.service img:hover {
+    transform: scale(1.05);
+}
+
+.service h3 {
+    margin: 1rem 0;
+    color: #cc7351;
+}
+
+.service p {
+    font-size: 1rem;
+    color: #666;
+}
+
+/* Footer */
+footer {
+    background-color: #e5b9a3;
+    color: #333;
+    text-align: center;
+    padding: 1em;
+    margin-top: auto;
+}
+
+
+/* Main Content */
+main {
+    flex: 1;
+    padding: 2em;
+    max-width: 1000px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1);
+}
+
+h1, h2, h3 {
+    color: #5a5a5a;  /* Softer dark gray */
+    margin-bottom: 1em;
+    font-family: 'Georgia', serif;
+}
+
+/* List and Item Styling */
+ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+li {
+    margin: 1em 0;
+    padding: 1.5em;
+    background-color: #ffffff;
+    border: 1px solid #dedede;
+    border-radius: 10px;
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+li:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateY(-4px);  /* Subtle hover effect */
+}
+
+/* Link Styles */
+a {
+    text-decoration: none;
+    color: #cc7351;  /* Elegant muted red for links */
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: #b36544;
+}
+
+/* for upcoming and past appointments buttons */
+/* Special Button Style */
+.special-btn {
+    background-color: #007bff; /* Primary Blue background color */
+    color: white; /* White text color */
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.special-btn:hover {
+    background-color: #0056b3; /* Darker blue hover effect */
+    color: white; /* Keep the text white */
+}
+
+.special-btn:active {
+    background-color: #003d7a; /* Even darker blue for active state */
+    color: white; /* Keep the text white */
+}
+
+
+
+/* for logout button */
+/* Special Button Style */
+.logout-btn {
+    background-color: #ff0000; /* Red background color */
+    color: white; /* Text color */
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-left: auto; /* Push the button to the far right */
+}
+
+.logout-btn:hover {
+    background-color: #cc0000; /* Darker red hover effect */
+    color: #ffffff;
+}
+
+.logout-btn:active {
+    background-color: #990000; /* Active button color */
+}
+
+
+
+/* Styling for the button container */
+.button-container {
+    display: flex;
+    justify-content: center; /* Center the buttons */
+    gap: 20px; /* Add space between buttons */
+    flex-wrap: wrap; /* Ensure buttons wrap on smaller screens */
+}
+
+.button-container .btn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.button-container .btn:hover {
+    background-color: #45a049;
+}
+
+@media screen and (max-width: 768px) {
+    .button-container {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+
+
+/* Button styles */
+.btn {
+    display: inline-block;
+    background-color: #4CAF50; /* Green background */
+    color: white; /* White text */
+    padding: 12px 24px; /* Padding for the button */
+    margin: 10px; /* Spacing between buttons */
+    text-align: center; /* Center the text */
+    border-radius: 5px; /* Rounded corners */
+    text-decoration: none; /* Remove underline from links */
+    font-size: 1rem; /* Adjust font size */
+    transition: background-color 0.3s, box-shadow 0.3s; /* Smooth hover transition */
+}
+
+.btn:hover {
+    background-color: #45a049; /* Darker green on hover */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Add shadow on hover */
+}
+
+/* Container for buttons */
+.button-container {
+    margin: 20px 0; /* Add some space above and below the buttons */
+    text-align: center; /* Center the buttons on the page */
+}
+
+
+/* Button and Input Styling */
+button, input[type="submit"] {
+    background-color: #cc7351;
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+button:hover, input[type="submit"]:hover {
+    background-color: #b36544;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+}
+
+input[type="text"], input[type="password"], input[type="email"], select {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #fafafa;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+}
+
+input[type="text"]:focus, input[type="password"]:focus, input[type="email"]:focus, select:focus {
+    border-color: #cc7351;
+    outline: none;
+}
+
+/* Footer always at the bottom */
+html {
+    height: 100%;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex-grow: 1;
+}
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+    main {
+        padding: 1em;
+    }
+
+    header, footer {
+        padding: 0.5em;
+    }
+
+    ul li {
+        margin: 0.5em 0;
+        padding: 1em;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    h1 {
+        font-size: 1.8em;
+    }
+
+    h2, h3 {
+        font-size: 1.5em;
+    }
+
+    input[type="text"], input[type="password"], input[type="email"], select, button, input[type="submit"] {
+        width: 100%;
+        font-size: 1em;
+    }
+}

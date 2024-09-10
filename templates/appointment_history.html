@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appointment History</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>
+        .customer-button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 0;
+            transition: background-color 0.3s ease;
+            width: 100%;
+            text-align: left;
+        }
+
+        .customer-button:hover {
+            background-color: #45a049;
+        }
+
+        .customer-history {
+            display: none;
+            margin-top: 10px;
+        }
+
+        .active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Appointment History</h1>
+    </header>
+    <main>
+        <h2>Appointments History</h2>
+
+        {% if customers %}
+            <!-- Loop through each customer and create a button for their history -->
+            {% for customer, appointments in customers.items() %}
+                <button class="customer-button" onclick="toggleHistory('{{ customer }}')">{{ customer }}</button>
+                <div id="{{ customer }}" class="customer-history">
+                    <ul>
+                        {% for appointment in appointments %}
+                        <li>
+                            Appointment Date: {{ appointment[0] }}<br>
+                            Status: {{ appointment[1] }}<br>
+                            Service: {{ appointment[3] }}<br>
+                            Price: ${{ '%.2f' % appointment[4] }}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    <!-- Total for this customer -->
+                    <h4>Total for {{ customer }}: ${{ '%.2f' % appointments | sum(attribute=4) }}</h4>
+                </div>
+            {% endfor %}
+        {% else %}
+            <!-- Display history for customers (non-shop owners) -->
+            <ul>
+                {% if history %}
+                    {% for appointment in history %}
+                    <li>
+                        Appointment Date: {{ appointment[0] }}<br>
+                        Status: {{ appointment[1] }}<br>
+                        Shop: {{ appointment[2] }}<br>
+                        Service: {{ appointment[3] }}<br>
+                        Price: ${{ '%.2f' % appointment[4] }}
+                    </li>
+                    {% endfor %}
+                {% else %}
+                    <li>No past appointments.</li>
+                {% endif %}
+            </ul>
+        {% endif %}
+
+        <button type="button" onclick="goBack()">Back</button>
+    </main>
+    <footer>
+        <p>&copy; 2024 Salon Booking System</p>
+    </footer>
+
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+
+        function toggleHistory(customerId) {
+            const historyDiv = document.getElementById(customerId);
+            if (historyDiv.classList.contains('active')) {
+                historyDiv.classList.remove('active');
+            } else {
+                historyDiv.classList.add('active');
+            }
+        }
+    </script>
+</body>
+</html>

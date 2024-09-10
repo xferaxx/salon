@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>User Profile</h1>
+    </header>
+    <main>
+        <form id="profileForm" method="POST" enctype="multipart/form-data" action="/profile">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" value="{{ user[0] }}" required>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" value="{{ user[1] }}" required>
+
+            <label for="password">Password (leave blank to keep unchanged):</label>
+            <input type="password" id="password" name="password">
+
+            <label for="confirm_password">Confirm Password:</label>
+            <input type="password" id="confirm_password" name="confirm_password">
+
+            <!-- Profile Picture Section -->
+            <label for="profile_picture">Update Profile Picture:</label>
+            <input type="file" id="profile_picture" name="profile_picture" accept="image/*">
+
+            <!-- Display the existing profile picture if available -->
+            {% if user['profile_picture'] %}
+                <img src="{{ url_for('static', filename='uploads/' + user['profile_picture']) }}" alt="Profile Picture" width="150">
+            {% endif %}
+
+            <button type="submit">Update Profile</button>
+            <button type="button" onclick="goBack()">Back</button>
+        </form>
+    </main>
+    <footer>
+        <p>&copy; 2024 Salon Booking System</p>
+    </footer>
+
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+
+        // Simple password confirmation validation
+        document.getElementById('profileForm').addEventListener('submit', function (event) {
+            var password = document.getElementById('password').value;
+            var confirmPassword = document.getElementById('confirm_password').value;
+
+            if (password && password !== confirmPassword) {
+                alert("Passwords do not match.");
+                event.preventDefault(); // Prevent form submission if passwords do not match
+            }
+        });
+    </script>
+</body>
+</html>
