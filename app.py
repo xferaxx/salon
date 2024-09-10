@@ -737,10 +737,7 @@ def create_database():
     print("Database and tables created successfully!")
 
 
-# Initialize the database
+# Initialize the database and run the Flask app in the same block
 if __name__ == '__main__':
-    create_database()
-
-# Run the Flask app
-if __name__ == '__main__':
-    app.run(debug=True)
+    create_database()  # Initialize the database
+    app.run(debug=True, host='0.0.0.0')  # Bind to all IPs and run the Flask app
