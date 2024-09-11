@@ -39,6 +39,70 @@ def connect_db():
     return pymysql.connect(host="localhost", user="root", password="", db="salon")
 
 
+@app.route('/appointments')
+def show_appointments():
+    if 'user_id' not in session:
+        return redirect(url_for('login'))
+
+    selected_date = request.args.get('date')
+
+    # Convert the selected_date to a datetime object for querying the database
+    selected_date_start = datetime.strptime(selected_date, '%Y-%m-%d')
+    selected_date_end = selected_date_start + timedelta(days=1)
+
+    # Connect to the database
+    db = connect_db()
+    cursor = db.cursor()
+
+    # Check if the logged-in user is a customer or shop owner
+    if session['role'] == 'customer':
+        # Query appointments for the logged-in customer on the selected date
+        cursor.execute("""
+            SELECT users.username, services.service_name, appointments.appointment_date 
+            FROM appointments 
+            JOIN users ON appointments.customer_id = users.id
+            JOIN services ON appointments.service_id = services.id
+            WHERE appointments.customer_id = %s
+            AND appointments.appointment_date >= %s 
+            AND appointments.appointment_date < %s
+        """, (session['user_id'], selected_date_start, selected_date_end))
+
+    elif session['role'] == 'shop_owner':
+        # Query appointments for the shop(s) owned by the logged-in shop owner on the selected date
+        cursor.execute("""
+            SELECT users.username, services.service_name, appointments.appointment_date 
+            FROM appointments 
+            JOIN users ON appointments.customer_id = users.id
+            JOIN services ON appointments.service_id = services.id
+            JOIN shops ON appointments.shop_id = shops.id
+            WHERE shops.owner_id = %s
+            AND appointments.appointment_date >= %s 
+            AND appointments.appointment_date < %s
+        """, (session['user_id'], selected_date_start, selected_date_end))
+
+    appointments = cursor.fetchall()
+    db.close()
+
+    # Format the appointments for display
+    appointment_list = [
+        {"customer_name": appointment[0], "service_name": appointment[1],
+         "appointment_time": appointment[2].strftime("%H:%M %p")}
+        for appointment in appointments
+    ]
+
+    return render_template('appointments.html', appointments=appointment_list, selected_date=selected_date)
+
+
+
+# Mock function for querying appointments (replace this with actual database logic)
+def query_appointments_by_date(date):
+    # For demonstration, return a list of example appointments for a specific date
+    return [
+        {"customer_name": "John Doe", "service_name": "Haircut", "appointment_time": "10:00 AM"},
+        {"customer_name": "Jane Smith", "service_name": "Nail Polish", "appointment_time": "2:00 PM"}
+    ]
+
+
 @app.route('/send_test_email')
 def send_test_email():
     msg = Message('Test Email', recipients=[os.environ.get('MAIL_USERNAME')])
