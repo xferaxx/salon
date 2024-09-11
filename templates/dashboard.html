@@ -372,7 +372,6 @@
                         {% else %}
                         {% for appointment in appointments %}
                         {
-                            title: '{{ appointment['shop_name'] }}',
                             start: '{{ appointment['appointment_date'] }}',
                             color: '{% if appointment['status'] == 'confirmed' %}green{% elif appointment['status'] == 'canceled' %}red{% else %}orange{% endif %}',
                             extendedProps: {
@@ -382,10 +381,14 @@
                         {% endfor %}
                         {% endif %}
                     ],
-                    eventDidMount: function(info) {
-                        var tooltipText = info.event.extendedProps.dataTitle;
-                        info.el.setAttribute('data-title', tooltipText);
-                    }
+                     dateClick: function(info) {
+                    // When a date is clicked, redirect to another form and pass the clicked date
+                    window.location.href = '/appointments?date=' + info.dateStr;
+                },
+                eventDidMount: function(info) {
+                    var tooltipText = info.event.extendedProps.dataTitle;
+                    info.el.setAttribute('data-title', tooltipText);
+                }
                 });
                 calendar.render();
             } else {
@@ -393,7 +396,5 @@
             }
         }
     </script>
-
 </body>
-
 </html>
