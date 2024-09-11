@@ -275,8 +275,9 @@
             {% endif %}
         </div>
 
-        <h2>Your Appointments Calendar</h2>
+        <button class="special-btn" onclick="toggleCalendar()">View Your Appointments Calendar</button>
         <div id="calendar"></div>
+
 
         {% else %}
         <!-- Customer Section -->
@@ -325,7 +326,7 @@
             </ul>
         </div>
 
-           <button class="special-btn" onclick="toggleCalendar()">View Your Appointments Calendar</button>
+        <button class="special-btn" onclick="toggleCalendar()">View Your Appointments Calendar</button>
         <div id="calendar"></div>
 
         {% endif %}
@@ -359,6 +360,7 @@
                         {% for shop in shops %}
                         {% for appointment in shop['appointments'] %}
                         {
+                            title: '{{ appointment['service_name'] }}',
                             start: '{{ appointment['appointment_date'] }}',
                             color: '{% if appointment['status'] == 'confirmed' %}green{% elif appointment['status'] == 'canceled' %}red{% else %}orange{% endif %}',
                             extendedProps: {
@@ -370,6 +372,7 @@
                         {% else %}
                         {% for appointment in appointments %}
                         {
+                            title: '{{ appointment['shop_name'] }}',
                             start: '{{ appointment['appointment_date'] }}',
                             color: '{% if appointment['status'] == 'confirmed' %}green{% elif appointment['status'] == 'canceled' %}red{% else %}orange{% endif %}',
                             extendedProps: {
