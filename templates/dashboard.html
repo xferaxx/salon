@@ -138,6 +138,24 @@
             bottom: 0;
         }
 
+        /* Tooltip styling */
+        .fc-event:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: rose;
+            padding: 5px 10px;
+            border-radius: 5px;
+            white-space: nowrap;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .fc-event:hover::after {
+            opacity: 1;
+        }
+
         /* Responsive Design */
         @media (max-width: 768px) {
             header h1 {
@@ -165,6 +183,7 @@
             }
         }
     </style>
+
 </head>
 
 <body>
@@ -313,7 +332,7 @@
             </ul>
         </div>
 
-       <button class="special-btn" onclick="toggleCalendar()">View Your Appointments Calendar</button>
+        <button class="special-btn" onclick="toggleCalendar()">View Your Appointments Calendar</button>
         <div id="calendar"></div>
         {% endif %}
     </main>
@@ -341,7 +360,7 @@
                             start: '{{ appointment['appointment_date'] }}',
                             color: '{% if appointment['status'] == 'confirmed' %}green{% elif appointment['status'] == 'canceled' %}red{% else %}orange{% endif %}',
                             extendedProps: {
-                                dataTitle: 'Customer: {{ appointment['customer_name'] }} | Service: {{ appointment['service_name'] }} | {{ appointment['appointment_date'] }}'
+                                tooltipInfo: 'Customer: {{ appointment['customer_name'] }} | Service: {{ appointment['service_name'] }} | {{ appointment['appointment_date'] }}'
                             }
                         },
                         {% endfor %}
@@ -349,19 +368,18 @@
                         {% else %}
                         {% for appointment in appointments %}
                         {
-                            title: '{{ appointment['shop_name'] }}',
                             start: '{{ appointment['appointment_date'] }}',
                             color: '{% if appointment['status'] == 'confirmed' %}green{% elif appointment['status'] == 'canceled' %}red{% else %}orange{% endif %}',
                             extendedProps: {
-                                dataTitle: 'Shop: {{ appointment['shop_name'] }} | {{ appointment['appointment_date'] }}'
+                                tooltipInfo: 'Shop: {{ appointment['shop_name'] }} | {{ appointment['appointment_date'] }}'
                             }
                         },
                         {% endfor %}
                         {% endif %}
                     ],
-                    eventDidMount: function (info) {
-                        var tooltipText = info.event.extendedProps.dataTitle;
-                        info.el.setAttribute('data-title', tooltipText);
+                    eventDidMount: function(info) {
+                        // Add the tooltip content to the event
+                        info.el.setAttribute('data-tooltip', info.event.extendedProps.tooltipInfo);
                     }
                 });
                 calendar.render();
