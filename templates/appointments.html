@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appointments for {{ selected_date }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Appointments for {{ selected_date }}</h1>
+    </header>
+
+    <main>
+        {% if appointments %}
+        <ul>
+            {% for appointment in appointments %}
+            <li>
+                <strong>Customer:</strong> {{ appointment['customer_name'] }}<br>
+                <strong>Service:</strong> {{ appointment['service_name'] }}<br>
+                <strong>Time:</strong> {{ appointment['appointment_time'] }}
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p>No appointments available for this date.</p>
+        {% endif %}
+    </main>
+
+    <footer>
+        <a href="/dashboard" class="btn">Back to Dashboard</a>
+    </footer>
+</body>
+</html>
