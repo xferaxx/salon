@@ -120,7 +120,7 @@ def schedule_email_reminders():
 
 
 # Schedule the task to run every minute
-scheduler.add_job(schedule_email_reminders, 'interval', minutes=10)
+scheduler.add_job(schedule_email_reminders, 'interval', hours=24)
 scheduler.start()
 
 

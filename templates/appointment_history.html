@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Appointment History</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/register.css') }}">
     <style>
         .customer-button {
             background-color: #4CAF50;
@@ -39,7 +40,9 @@
         <h1>Appointment History</h1>
     </header>
     <main>
-         <button type="button" onclick="goBack()">Back</button>
+
+        <button type="button" onclick="goBack()">Back</button>
+
         <h2>Appointments History</h2>
 
         {% if customers %}
