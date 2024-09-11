@@ -42,7 +42,6 @@
             margin-bottom: 20px;
         }
 
-        /* Smaller Buttons */
         .btn {
             background-color: #4CAF50;
             color: white;
@@ -78,7 +77,6 @@
             background-color: #d39b87;
         }
 
-        /* Hidden content for shops and appointments */
         .content {
             display: none;
             margin-top: 15px;
@@ -102,17 +100,21 @@
         }
 
         #calendar {
-            display: none; /* Hide calendar initially */
             max-width: 100%;
             margin: 0 auto;
             padding: 20px;
         }
 
         .fc-event {
-            font-size: 0.8rem;
+            font-size: 1rem;
             padding: 10px;
             white-space: normal;
             word-wrap: break-word;
+        }
+
+        .fc-event-time {
+            font-weight: bold;
+            color: #4CAF50;
         }
 
         .fc-toolbar-title {
@@ -311,9 +313,8 @@
             </ul>
         </div>
 
-        <button class="special-btn" onclick="toggleCalendar()">View Your Appointments Calendar</button>
+       <button class="special-btn" onclick="toggleCalendar()">View Your Appointments Calendar</button>
         <div id="calendar"></div>
-
         {% endif %}
     </main>
 
@@ -324,19 +325,10 @@
     <!-- FullCalendar JS -->
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js'></script>
     <script>
-        function goBack() {
-            window.history.back();
-        }
-
-        function toggleContent(id) {
-            var content = document.getElementById(id);
-            content.classList.toggle('active');
-        }
-
         function toggleCalendar() {
             var calendarEl = document.getElementById('calendar');
             if (calendarEl.style.display === "none" || calendarEl.style.display === "") {
-                calendarEl.style.display = "block"; // Show the calendar
+                calendarEl.style.display = "block";
                 var calendar = new FullCalendar.Calendar(calendarEl, {
                     initialView: 'dayGridMonth',
                     height: 'auto',
@@ -367,14 +359,14 @@
                         {% endfor %}
                         {% endif %}
                     ],
-                    eventDidMount: function(info) {
+                    eventDidMount: function (info) {
                         var tooltipText = info.event.extendedProps.dataTitle;
                         info.el.setAttribute('data-title', tooltipText);
                     }
                 });
                 calendar.render();
             } else {
-                calendarEl.style.display = "none"; // Hide the calendar
+                calendarEl.style.display = "none";
             }
         }
     </script>
