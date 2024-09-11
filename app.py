@@ -4,7 +4,6 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from datetime import datetime, timedelta
 import os
 import secrets
-import MySQLdb
 import mysql.connector
 import pytz
 from werkzeug.utils import secure_filename
@@ -37,7 +36,7 @@ print(datetime.now(local_tz))
 
 # Function to connect to the database
 def connect_db():
-    return MySQLdb.connect(host="localhost", user="root", password="", db="salon")
+    return pymysql.connect(host="localhost", user="root", password="", db="salon")
 
 
 @app.route('/send_test_email')
@@ -737,7 +736,7 @@ def create_database():
     print("Database and tables created successfully!")
 
 
-# Initialize the database and run the Flask app in the same block
+# Run the Flask app on port 5000
 if __name__ == '__main__':
-    create_database()  # Initialize the database
-    app.run(debug=True, host='0.0.0.0')  # Bind to all IPs and run the Flask app
+    create_database()
+    app.run(debug=True, host="0.0.0.0", port=5000)

@@ -35,9 +35,11 @@
 </head>
 <body>
     <header>
+
         <h1>Appointment History</h1>
     </header>
     <main>
+         <button type="button" onclick="goBack()">Back</button>
         <h2>Appointments History</h2>
 
         {% if customers %}
@@ -77,8 +79,6 @@
                 {% endif %}
             </ul>
         {% endif %}
-
-        <button type="button" onclick="goBack()">Back</button>
     </main>
     <footer>
         <p>&copy; 2024 Salon Booking System</p>

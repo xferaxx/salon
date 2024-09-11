@@ -14,6 +14,7 @@
     </header>
 
     <main>
+        <a href="/dashboard" class="btn">Back to Dashboard</a>
         {% if appointments %}
             {% set current_user = None %}
             <ul>
@@ -45,8 +46,6 @@
         {% else %}
             <p>No past appointments found.</p>
         {% endif %}
-
-        <a href="/dashboard" class="btn">Back to Dashboard</a>
     </main>
 </body>
 

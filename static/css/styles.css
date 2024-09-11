@@ -64,10 +64,10 @@ nav .btn {
     color: black;
     padding: 10px 20px;
     border-radius: 30px;
-    margin-left: 10px;
     text-decoration: none;
     font-weight: bold;
     transition: background-color 0.3s ease;
+    margin: 10px 0
 }
 
 nav .btn:hover {
@@ -247,7 +247,7 @@ a:hover {
     font-size: 1.2rem;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    margin-left: auto; /* Push the button to the far right */
+    align-items: center;
 }
 
 .logout-btn:hover {
@@ -257,6 +257,15 @@ a:hover {
 
 .logout-btn:active {
     background-color: #990000; /* Active button color */
+}
+
+/* Centering the logout button */
+.center-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 10vh; /* Full height of the viewport */
+    text-align: center;
 }
 
 .btn-primary {
@@ -337,20 +346,21 @@ a:hover {
 /* Button styles */
 .btn {
     display: inline-block;
-    background-color: #4CAF50; /* Green background */
+    background-color: #d89696; /* Soft pink background */
     color: white; /* White text */
     padding: 12px 24px; /* Padding for the button */
     margin: 10px; /* Spacing between buttons */
     text-align: center; /* Center the text */
-    border-radius: 5px; /* Rounded corners */
+    border-radius: 20px; /* Softer, more rounded corners */
     text-decoration: none; /* Remove underline from links */
     font-size: 1rem; /* Adjust font size */
     transition: background-color 0.3s, box-shadow 0.3s; /* Smooth hover transition */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
 }
 
 .btn:hover {
-    background-color: #45a049; /* Darker green on hover */
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Add shadow on hover */
+    background-color: #e29b9b; /* Slightly lighter pink for hover effect */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2); /* Stronger shadow on hover */
 }
 
 /* Container for buttons */
