@@ -42,41 +42,41 @@
             margin-bottom: 20px;
         }
 
-/* Smaller Buttons */
-.btn {
-    background-color: #4CAF50;
-    color: white;
-    padding: 8px 16px; /* Reduce padding for smaller size */
-    border-radius: 8px;
-    border: none;
-    font-size: 0.85rem; /* Smaller font size */
-    cursor: pointer;
-    text-decoration: none;
-    transition: background-color 0.3s ease;
-    margin: 8px;
-}
+        /* Smaller Buttons */
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: none;
+            font-size: 0.85rem;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+            margin: 8px;
+        }
 
-.btn:hover {
-    color: #d39b87;
-}
+        .btn:hover {
+            color: #d39b87;
+        }
 
-.special-btn {
-    background-color: #d39b87;
-    color: white;
-    padding: 10px; /* Reduce padding for smaller size */
-    margin: 10px 0;
-    text-align: center;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
-    font-size: 1rem; /* Slightly smaller font size */
-    transition: background-color 0.3s ease;
-    width: 100%; /* Ensure it fills the container on small screens */
-}
+        .special-btn {
+            background-color: #d39b87;
+            color: white;
+            padding: 10px;
+            margin: 10px 0;
+            text-align: center;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+            width: 100%;
+        }
 
-.special-btn:hover {
-    background-color: #d39b87;
-}
+        .special-btn:hover {
+            background-color: #d39b87;
+        }
 
         /* Hidden content for shops and appointments */
         .content {
@@ -102,6 +102,7 @@
         }
 
         #calendar {
+            display: none; /* Hide calendar initially */
             max-width: 100%;
             margin: 0 auto;
             padding: 20px;
@@ -181,18 +182,16 @@
                 <p>No profile picture.</p>
                 {% endif %}
             </div>
-            &nbsp;&nbsp;&nbsp;
-
         </div>
     </header>
-        <div class="center-container">
-             <a href="/logout" class="logout-btn">Logout</a>
-        </div>
+
+    <div class="center-container">
+        <a href="/logout" class="logout-btn">Logout</a>
+    </div>
 
     <main>
-
-        {% if session['role'] == 'shop_owner' %}
         <!-- Shop Owner Section -->
+        {% if session['role'] == 'shop_owner' %}
         <div class="button-container">
             <a href="/profile" class="btn">View/Update Profile</a>
             <a href="/appointment_history" class="btn">View Appointment History</a>
@@ -214,8 +213,7 @@
                     <h4>Services:</h4>
                     <ul>
                         {% for service in shop['services'] %}
-                        <li>{{ service['service_name'] }} - ${{ service['price'] }} ({{ service['duration'] }} minutes)
-                        </li>
+                        <li>{{ service['service_name'] }} - ${{ service['price'] }} ({{ service['duration'] }} minutes)</li>
                         {% endfor %}
                     </ul>
                 </li>
@@ -237,8 +235,10 @@
                 {% if appointment['status'] == 'pending' %}
                 {% set has_pending_appointments = True %}
                 <li>
-                    Customer: {{ appointment['customer_name'] }}<br> Service: {{ appointment['service_name'] }}<br>
-                    Appointment Date: {{ appointment['appointment_date'] }}<br> Status: {{ appointment['status'] }}<br>
+                    Customer: {{ appointment['customer_name'] }}<br>
+                    Service: {{ appointment['service_name'] }}<br>
+                    Appointment Date: {{ appointment['appointment_date'] }}<br>
+                    Status: {{ appointment['status'] }}<br>
 
                     <form method="POST" action="/update_appointment/{{ appointment['id'] }}/confirmed">
                         <button type="submit" class="btn">Confirm</button>
@@ -259,7 +259,7 @@
             {% endif %}
         </div>
 
-        <h2>Your Appointments Calendar</h2>
+        <button class="special-btn" onclick="toggleCalendar()">View Your Appointments Calendar</button>
         <div id="calendar"></div>
 
         {% else %}
@@ -299,8 +299,10 @@
                 {% if appointments %}
                 {% for appointment in appointments %}
                 <li>
-                    Shop: {{ appointment['shop_name'] }}<br> Service: {{ appointment['service_name'] }}<br>
-                    Appointment Date: {{ appointment['appointment_date'] }}<br> Status: {{ appointment['status'] }}<br>
+                    Shop: {{ appointment['shop_name'] }}<br>
+                    Service: {{ appointment['service_name'] }}<br>
+                    Appointment Date: {{ appointment['appointment_date'] }}<br>
+                    Status: {{ appointment['status'] }}<br>
                 </li>
                 {% endfor %}
                 {% else %}
@@ -309,7 +311,7 @@
             </ul>
         </div>
 
-        <h2>Your Appointments Calendar</h2>
+        <button class="special-btn" onclick="toggleCalendar()">View Your Appointments Calendar</button>
         <div id="calendar"></div>
 
         {% endif %}
@@ -331,45 +333,50 @@
             content.classList.toggle('active');
         }
 
-        document.addEventListener('DOMContentLoaded', function() {
+        function toggleCalendar() {
             var calendarEl = document.getElementById('calendar');
-            var calendar = new FullCalendar.Calendar(calendarEl, {
-                initialView: 'dayGridMonth',
-                height: 'auto',
-                events: [
-                    {% if session['role'] == 'shop_owner' %}
-                    {% for shop in shops %}
-                    {% for appointment in shop['appointments'] %}
-                    {
-                        title: '{{ appointment['service_name'] }}',
-                        start: '{{ appointment['appointment_date'] }}',
-                        color: '{% if appointment['status'] == 'confirmed' %}green{% elif appointment['status'] == 'canceled' %}red{% else %}orange{% endif %}',
-                        extendedProps: {
-                            dataTitle: 'Customer: {{ appointment['customer_name'] }} | Service: {{ appointment['service_name'] }} | {{ appointment['appointment_date'] }}'
-                        }
-                    },
-                    {% endfor %}
-                    {% endfor %}
-                    {% else %}
-                    {% for appointment in appointments %}
-                    {
-                        title: '{{ appointment['shop_name'] }}',
-                        start: '{{ appointment['appointment_date'] }}',
-                        color: '{% if appointment['status'] == 'confirmed' %}green{% elif appointment['status'] == 'canceled' %}red{% else %}orange{% endif %}',
-                        extendedProps: {
-                            dataTitle: 'Shop: {{ appointment['shop_name'] }} | {{ appointment['appointment_date'] }}'
-                        }
-                    },
-                    {% endfor %}
-                    {% endif %}
-                ],
-                eventDidMount: function(info) {
-                    var tooltipText = info.event.extendedProps.dataTitle;
-                    info.el.setAttribute('data-title', tooltipText);
-                }
-            });
-            calendar.render();
-        });
+            if (calendarEl.style.display === "none" || calendarEl.style.display === "") {
+                calendarEl.style.display = "block"; // Show the calendar
+                var calendar = new FullCalendar.Calendar(calendarEl, {
+                    initialView: 'dayGridMonth',
+                    height: 'auto',
+                    events: [
+                        {% if session['role'] == 'shop_owner' %}
+                        {% for shop in shops %}
+                        {% for appointment in shop['appointments'] %}
+                        {
+                            title: '{{ appointment['service_name'] }}',
+                            start: '{{ appointment['appointment_date'] }}',
+                            color: '{% if appointment['status'] == 'confirmed' %}green{% elif appointment['status'] == 'canceled' %}red{% else %}orange{% endif %}',
+                            extendedProps: {
+                                dataTitle: 'Customer: {{ appointment['customer_name'] }} | Service: {{ appointment['service_name'] }} | {{ appointment['appointment_date'] }}'
+                            }
+                        },
+                        {% endfor %}
+                        {% endfor %}
+                        {% else %}
+                        {% for appointment in appointments %}
+                        {
+                            title: '{{ appointment['shop_name'] }}',
+                            start: '{{ appointment['appointment_date'] }}',
+                            color: '{% if appointment['status'] == 'confirmed' %}green{% elif appointment['status'] == 'canceled' %}red{% else %}orange{% endif %}',
+                            extendedProps: {
+                                dataTitle: 'Shop: {{ appointment['shop_name'] }} | {{ appointment['appointment_date'] }}'
+                            }
+                        },
+                        {% endfor %}
+                        {% endif %}
+                    ],
+                    eventDidMount: function(info) {
+                        var tooltipText = info.event.extendedProps.dataTitle;
+                        info.el.setAttribute('data-title', tooltipText);
+                    }
+                });
+                calendar.render();
+            } else {
+                calendarEl.style.display = "none"; // Hide the calendar
+            }
+        }
     </script>
 
 </body>
