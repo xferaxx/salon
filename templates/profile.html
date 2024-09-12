@@ -1,44 +1,50 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ lang }}">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Profile</title>
+    <title>{{ translations['user_profile'] }}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/register.css') }}">
 </head>
+
 <body>
     <header>
-        <h1>User Profile</h1>
+        <h1>{{ translations['user_profile'] }}</h1>
     </header>
     <main>
         <form id="profileForm" method="POST" enctype="multipart/form-data" action="/profile">
-            <label for="username">Username:</label>
+            <label for="username">{{ translations['username'] }}:</label>
             <input type="text" id="username" name="username" value="{{ user[0] }}" required>
 
-            <label for="email">Email:</label>
+            <label for="email">{{ translations['email'] }}:</label>
             <input type="email" id="email" name="email" value="{{ user[1] }}" required>
 
-            <label for="password">Password (leave blank to keep unchanged):</label>
+            <label for="password">{{ translations['password'] }} ({{ translations['leave_blank_to_keep_unchanged'] }}):</label>
             <input type="password" id="password" name="password">
 
-            <label for="confirm_password">Confirm Password:</label>
+            <label for="confirm_password">{{ translations['confirm_password'] }}:</label>
             <input type="password" id="confirm_password" name="confirm_password">
 
             <!-- Profile Picture Section -->
-            <label for="profile_picture">Update Profile Picture:</label>
+            <label for="profile_picture">{{ translations['update_profile_picture'] }}:</label>
             <input type="file" id="profile_picture" name="profile_picture" accept="image/*">
 
             <!-- Display the existing profile picture if available -->
             {% if user['profile_picture'] %}
-                <img src="{{ url_for('static', filename='uploads/' + user['profile_picture']) }}" alt="Profile Picture" width="150">
+                <img src="{{ url_for('static', filename='uploads/' + user['profile_picture']) }}" alt="{{ translations['profile_picture'] }}" width="150">
             {% endif %}
 
-            <button type="submit">Update Profile</button>
-            <button type="button" onclick="goBack()">Back</button>
+            <button type="submit">{{ translations['update_profile'] }}</button>
+            <button type="button" onclick="goBack()">{{ translations['back'] }}</button>
         </form>
     </main>
     <footer>
-        <p>&copy; 2024 Salon Booking System By JK</p>
+        <div class="language-switcher">
+            <a href="{{ url_for('change_language', lang_code='en') }}">English</a> |
+            <a href="{{ url_for('change_language', lang_code='he') }}">עברית</a>
+        </div>
+        <p>&copy; 2024 {{ translations['salon_booking_system'] }} By JK</p>
     </footer>
 
     <script>
@@ -52,10 +58,11 @@
             var confirmPassword = document.getElementById('confirm_password').value;
 
             if (password && password !== confirmPassword) {
-                alert("Passwords do not match.");
+                alert("{{ translations['passwords_do_not_match'] }}");
                 event.preventDefault(); // Prevent form submission if passwords do not match
             }
         });
     </script>
 </body>
+
 </html>

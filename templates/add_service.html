@@ -1,42 +1,46 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ lang }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Service</title>
+    <title>{{ translations['add_service_title'] }}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/register.css') }}">
 </head>
 <body>
     <header>
-        <h1>Add a New Service</h1>
+        <h1>{{ translations['add_service_title'] }}</h1>
     </header>
     <main>
         <form method="POST" action="/add_service">
-            <label for="shop_id">Select Shop:</label>
+            <label for="shop_id">{{ translations['select_shop'] }}:</label>
             <select id="shop_id" name="shop_id" required>
                 {% for shop in shops %}
                 <option value="{{ shop[0] }}">{{ shop[1] }}</option>
                 {% endfor %}
             </select>
 
-            <label for="service_name">Service Name:</label>
+            <label for="service_name">{{ translations['service_name'] }}:</label>
             <input type="text" id="service_name" name="service_name" required>
 
-            <label for="price">Price:</label>
+            <label for="price">{{ translations['price'] }}:</label>
             <input type="number" step="0.01" id="price" name="price" required>
 
-            <label for="duration">Duration (minutes):</label>
+            <label for="duration">{{ translations['duration'] }}:</label>
             <input type="number" id="duration" name="duration" required>
 
-            <button type="submit">Add Service</button>
+            <button type="submit">{{ translations['add_service_button'] }}</button>
             <!-- Back button -->
-            <button type="button" onclick="goBack()">Back</button>
+            <button type="button" onclick="goBack()">{{ translations['back_button'] }}</button>
         </form>
     </main>
     <footer>
-        <p>&copy; 2024 Salon Booking System By JK</p>
+        <div class="lang-switcher">
+            <a href="{{ url_for('change_language', lang_code='en') }}">English</a> |
+            <a href="{{ url_for('change_language', lang_code='he') }}">עברית</a>
+        </div>
+        <p>{{ translations['footer_text'] }}</p>
     </footer>
-<script>
+    <script>
         function goBack() {
             window.history.back();
         }

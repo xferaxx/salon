@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ lang }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel</title>
+    <title>{{ translations['admin_panel_title'] }}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
 </head>
 <body>
     <header>
-        <h1>Admin Panel - Approve Shops</h1>
+        <h1>{{ translations['admin_panel_header'] }}</h1>
     </header>
     <main>
-        <h2>Shops Pending Approval</h2>
+        <h2>{{ translations['pending_shops'] }}</h2>
         <ul>
             {% for shop in unapproved_shops %}
             <li>
@@ -19,19 +19,23 @@
                 <p>{{ shop[2] }}</p> <!-- Shop address -->
                 <p>{{ shop[3] }}</p> <!-- Shop phone -->
                 <form method="POST" action="/approve_shop/{{ shop[0] }}">
-                    <button type="submit">Approve</button>
+                    <button type="submit">{{ translations['approve_button'] }}</button>
                 </form>
 
             </li>
             {% else %}
-            <li>No shops pending approval.</li>
+            <li>{{ translations['no_pending_shops'] }}</li>
             {% endfor %}
 
         </ul>
-        <button type="button" onclick="goBack()">Back</button>
+        <button type="button" onclick="goBack()">{{ translations['back_button'] }}</button>
     </main>
     <footer>
-        <p>&copy; 2024 Salon Booking System By JK</p>
+        <div class="language-switcher">
+            <a href="{{ url_for('change_language', lang_code='en') }}">English</a> |
+            <a href="{{ url_for('change_language', lang_code='he') }}">עברית</a>
+        </div>
+        <p>&copy; 2024 {{ translations['footer_text'] }}</p>
     </footer>
  <script>
         function goBack() {

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, json
 from flask_mail import Mail, Message
 from apscheduler.schedulers.background import BackgroundScheduler
 from datetime import datetime, timedelta
@@ -39,10 +39,39 @@ def connect_db():
     return pymysql.connect(host="localhost", user="root", password="", db="salon")
 
 
+# Define the path to the translations directory
+TRANSLATIONS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'translations')
+
+
+def load_translation(language):
+    with open(os.path.join(TRANSLATIONS_DIR, f"{language}.json"), "r", encoding="utf-8") as file:
+        return json.load(file)
+
+
+@app.route('/')
+def home():
+    # Get language from query params or session
+    language = request.args.get('lang', session.get('lang', 'en'))
+    session['lang'] = language  # Save language in session
+
+    translations = load_translation(language)
+
+    return render_template('index.html', translations=translations, lang=language)
+
+
+@app.route('/change_language/<lang_code>')
+def change_language(lang_code):
+    session['lang'] = lang_code  # Set language in session
+    return redirect(url_for('home'))  # Redirect back to homepage
+
+
 @app.route('/appointments')
 def show_appointments():
     if 'user_id' not in session:
         return redirect(url_for('login'))
+
+    language = session.get('lang', 'en')
+    translations = load_translation(language)
 
     selected_date = request.args.get('date')
 
@@ -93,7 +122,8 @@ def show_appointments():
         for appointment in appointments
     ]
 
-    return render_template('appointments.html', appointments=appointment_list, selected_date=selected_date)
+    return render_template('appointments.html', translations=translations, lang=language,
+                           appointments=appointment_list, selected_date=selected_date)
 
 
 # Mock function for querying appointments (replace this with actual database logic)
@@ -198,6 +228,9 @@ def index():
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+    language = session.get('lang', 'en')  # Default to English
+    translations = load_translation(language)
+
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -234,7 +267,7 @@ def register():
 
         return redirect(url_for('login'))
 
-    return render_template('register.html')
+    return render_template('register.html', translations=translations, lang=language)
 
 
 @app.route('/logout')
@@ -248,6 +281,12 @@ def logout():
 # Login route
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    # Get language from query params or session
+    language = request.args.get('lang', session.get('lang', 'en'))
+    session['lang'] = language  # Save language in session
+
+    translations = load_translation(language)
+
     if request.method == 'POST':
         # Login logic
         username = request.form['username']
@@ -265,13 +304,17 @@ def login():
             return redirect(url_for('dashboard'))
         else:
             return 'Invalid login'
-    return render_template('login.html')
+    return render_template('login.html', translations=translations, lang=language)
 
 
 @app.route('/dashboard')
 def dashboard():
     if 'user_id' not in session:
         return redirect(url_for('login'))
+
+    # Load translation based on session language
+    language = session.get('lang', 'en')  # default to English if not set
+    translations = load_translation(language)
 
     db = connect_db()
     cursor = db.cursor()
@@ -355,7 +398,8 @@ def dashboard():
         db.close()
 
         # Rendering the updated dashboard with today's appointments
-        return render_template('dashboard.html', shops=shop_data, username=username, profile_picture=profile_picture, today_appointments=today_appointments)
+        return render_template('dashboard.html', shops=shop_data, username=username, profile_picture=profile_picture,
+                               today_appointments=today_appointments, translations=translations, lang=language)
 
     # Customer Dashboard
     else:
@@ -382,7 +426,8 @@ def dashboard():
 
         db.close()
         return render_template('dashboard.html', shops=shops, appointments=customer_appointments,
-                               username=username, profile_picture=profile_picture)
+                               username=username, profile_picture=profile_picture, translations=translations,
+                               lang=language)
 
 
 # Route to add a new shop (for shop owners only)
@@ -390,6 +435,12 @@ def dashboard():
 def add_shop():
     if 'user_id' not in session or session['role'] != 'shop_owner':
         return redirect(url_for('login'))
+
+    # Get the language from the session or default to 'en'
+    language = session.get('lang', 'en')
+
+    # Load the translations
+    translations = load_translation(language)
 
     if request.method == 'POST':
         shop_name = request.form['shop_name']
@@ -408,7 +459,7 @@ def add_shop():
 
         return redirect(url_for('dashboard'))
 
-    return render_template('add_shop.html')
+    return render_template('add_shop.html', translations=translations, lang=language)
 
 
 # Shop list route (For customers)
@@ -450,6 +501,10 @@ def add_service():
     if 'user_id' not in session or session['role'] != 'shop_owner':
         return redirect(url_for('login'))
 
+    # Load the translations
+    language = session.get('lang', 'en')
+    translations = load_translation(language)
+
     if request.method == 'POST':
         service_name = request.form['service_name']
         price = request.form['price']
@@ -462,6 +517,7 @@ def add_service():
             INSERT INTO services (shop_id, service_name, price, duration)
             VALUES (%s, %s, %s, %s)
         """, (shop_id, service_name, price, duration))
+
         db.commit()
         db.close()
         return redirect(url_for('dashboard'))
@@ -473,7 +529,7 @@ def add_service():
     shops = cursor.fetchall()
     db.close()
 
-    return render_template('add_service.html', shops=shops)
+    return render_template('add_service.html', shops=shops, translations=translations, lang=language)
 
 
 @app.route('/book/<int:shop_id>', methods=['GET', 'POST'])
@@ -509,7 +565,12 @@ def book(shop_id):
 
     db.close()
 
-    return render_template('book_appointment.html', shop_id=shop_id, shop_name=shop_name, services=services)
+    # Load translations based on language in session
+    language = session.get('lang', 'en')
+    translations = load_translation(language)
+
+    return render_template('book_appointment.html', shop_name=shop_name, shop_id=shop_id,
+                           services=services, translations=translations, lang=language)
 
 
 # for photo upload for profile
@@ -566,13 +627,20 @@ def profile():
     user = cursor.fetchone()
     db.close()
 
-    return render_template('profile.html', user=user)
+    # Load translations
+    language = session.get('lang', 'en')
+    translations = load_translation(language)
+
+    return render_template('profile.html', user=user, translations=translations, lang=language)
 
 
 @app.route('/appointment_history')
 def appointment_history():
     if 'user_id' not in session:
         return redirect(url_for('login'))
+
+    language = session.get('lang', 'en')
+    translations = load_translation(language)
 
     db = connect_db()
     cursor = db.cursor()
@@ -614,8 +682,8 @@ def appointment_history():
 
     db.close()
 
-    return render_template('appointment_history.html', history=history, customers=customers)
-
+    return render_template('appointment_history.html', history=history, customers=customers, translations=translations,
+                           lang=language)
 
 
 # Route for customers to view past appointments
@@ -623,6 +691,10 @@ def appointment_history():
 def customer_past_appointments():
     if 'user_id' not in session or session['role'] != 'customer':
         return redirect(url_for('login'))
+
+    # Load translations based on session language
+    language = session.get('lang', 'en')
+    translations = load_translation(language)
 
     db = connect_db()
     cursor = db.cursor()
@@ -642,7 +714,8 @@ def customer_past_appointments():
     past_appointments = cursor.fetchall()
     db.close()
 
-    return render_template('customer_past_appointments.html', appointments=past_appointments)
+    return render_template('customer_past_appointments.html', appointments=past_appointments, translations=translations,
+                           lang=language)
 
 
 # Route for customers to view upcoming appointments
@@ -669,7 +742,12 @@ def customer_upcoming_appointments():
     upcoming_appointments = cursor.fetchall()
     db.close()
 
-    return render_template('customer_upcoming_appointments.html', appointments=upcoming_appointments)
+    # Load translations
+    language = session.get('lang', 'en')
+    translations = load_translation(language)
+
+    return render_template('customer_upcoming_appointments.html', appointments=upcoming_appointments,
+                           translations=translations, lang=language)
 
 
 # Route for shop owners to view past appointments
@@ -695,8 +773,13 @@ def owner_past_appointments():
 
     past_appointments = cursor.fetchall()
 
+    # Load translations
+    language = session.get('lang', 'en')
+    translations = load_translation(language)
+
     db.close()
-    return render_template('owner_past_appointments.html', appointments=past_appointments)
+    return render_template('owner_past_appointments.html', appointments=past_appointments, translations=translations,
+                           lang=language)
 
 
 # Route for shop owners to view upcoming appointments
@@ -721,14 +804,25 @@ def owner_upcoming_appointments():
     """, (session['user_id'], current_date))
     upcoming_appointments = cursor.fetchall()
 
+    # Load translations
+    language = session.get('lang', 'en')
+    translations = load_translation(language)
+
     db.close()
-    return render_template('owner_upcoming_appointments.html', appointments=upcoming_appointments)
+    return render_template('owner_upcoming_appointments.html', appointments=upcoming_appointments,
+                           translations=translations, lang=language)
 
 
 @app.route('/admin')
 def admin():
     if 'user_id' not in session or session['role'] != 'admin':
         return redirect(url_for('login'))
+
+    # Get the language from the session or default to 'en'
+    language = session.get('lang', 'en')
+
+    # Load the translations
+    translations = load_translation(language)
 
     db = connect_db()
     cursor = db.cursor()
@@ -739,7 +833,8 @@ def admin():
 
     db.close()
 
-    return render_template('admin_panel.html', unapproved_shops=unapproved_shops)
+    return render_template('admin_panel.html', translations=translations, lang=language,
+                           unapproved_shops=unapproved_shops)
 
 
 @app.route('/approve_shop/<int:shop_id>', methods=['POST'])

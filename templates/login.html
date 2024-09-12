@@ -1,31 +1,35 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ lang }}">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>{{ translations['login_title'] }}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
 </head>
 
 <body>
     <header>
-        <h1>Login to Your Account</h1>
+        <h1>{{ translations['login_title'] }}</h1>
     </header>
     <main>
         <form method="POST" action="/login">
-            <label for="username">Username</label>
+            <label for="username">{{ translations['username'] }}</label>
             <input type="text" id="username" name="username" required>
 
-            <label for="password">Password</label>
+            <label for="password">{{ translations['password'] }}</label>
             <input type="password" id="password" name="password" required>
 
-            <button type="submit">Login</button>
-            <button type="button" onclick="goBack()">Back</button>
+            <button type="submit">{{ translations['login_button'] }}</button>
+            <button type="button" onclick="goBack()">{{ translations['back_button'] }}</button>
         </form>
     </main>
     <footer>
-        <p>&copy; 2024 Salon Booking System By JK</p>
+        <div class="language-switcher">
+            <a href="{{ url_for('change_language', lang_code='en') }}">English</a> |
+            <a href="{{ url_for('change_language', lang_code='he') }}">עברית</a>
+        </div>
+        <p>{{ translations['footer'] }}</p>
     </footer>
     <script>
         function goBack() {

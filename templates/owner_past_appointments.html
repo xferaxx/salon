@@ -1,20 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ lang }}">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Past Appointments - Shop Owner</title>
+    <title>{{ translations['past_appointments'] }} - {{ translations['shop_owner'] }}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 
 <body>
     <header>
-        <h1>Past Appointments</h1>
+        <h1>{{ translations['past_appointments'] }}</h1>
     </header>
 
     <main>
-        <a href="/dashboard" class="special-btn">Back to Dashboard</a>
+        <a href="/dashboard" class="special-btn">{{ translations['back_to_dashboard'] }}</a>
         <br><br><br>
 
         {% if appointments %}
@@ -22,17 +22,17 @@
                 {% for appointment in appointments %}
                     <!-- Display each appointment -->
                     <div class="appointment">
-                        <strong>Customer:</strong> {{ appointment[2] }}<br>
-                        <strong>Service:</strong> {{ appointment[3] }}<br>
-                        <strong>Date:</strong> {{ appointment[0] }}<br>
-                        <strong>Status:</strong> {{ appointment[1] }}<br>
-                        <strong>Price:</strong> ${{ appointment[4] }}
+                        <strong>{{ translations['customer'] }}:</strong> {{ appointment[2] }}<br>
+                        <strong>{{ translations['service'] }}:</strong> {{ appointment[3] }}<br>
+                        <strong>{{ translations['date'] }}:</strong> {{ appointment[0] }}<br>
+                        <strong>{{ translations['status'] }}:</strong> {{ appointment[1] }}<br>
+                        <strong>{{ translations['price'] }}:</strong> &#8362;{{ appointment[4] }}
                     </div>
                     <hr> <!-- Separator between appointments -->
                 {% endfor %}
             </section>
         {% else %}
-            <p>No past appointments found.</p>
+            <p>{{ translations['no_past_appointments_found'] }}</p>
         {% endif %}
     </main>
 </body>

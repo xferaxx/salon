@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ lang }}">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
+    <title>{{ translations['dashboard_title'] }}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <!-- FullCalendar CSS -->
     <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css' rel='stylesheet' />
@@ -210,9 +210,9 @@
 
 <body>
     <header>
-        <h1>Dashboard</h1>
+        <h1>{{ translations['dashboard_title'] }}</h1>
         <div class="header-right">
-            <p class="welcome-message">Welcome, {{ username }}</p>
+            <p class="welcome-message">{{ translations['welcome'] }}, {{ username }}</p>
 
             <!-- Display the profile picture -->
             <div class="profile-section">
@@ -220,14 +220,14 @@
                 <img src="{{ url_for('static', filename='uploads/' + profile_picture) }}" alt="Profile Picture"
                     style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 2px solid #4C3B3F; display: block; margin: 0 auto;">
                 {% else %}
-                <p>No profile picture.</p>
+                <p>{{ translations['no_profile_picture'] }}</p>
                 {% endif %}
             </div>
             &nbsp;&nbsp;&nbsp;
         </div>
     </header>
     <div class="center-container">
-        <a href="/logout" class="logout-btn">Logout</a>
+        <a href="/logout" class="logout-btn">{{ translations['logout'] }}</a>
     </div>
     <main>
 
@@ -235,39 +235,39 @@
         <!-- Shop Owner Section -->
 
         <div class="button-container">
-            <a href="/profile" class="btn">View/Update Profile</a>
-            <a href="/appointment_history" class="btn">View Appointment History</a>
-            <a href="/add_shop" class="btn">Add New Shop</a>
-            <a href="/add_service" class="btn">Add Service</a>
-            <a href="/owner_past_appointments" class="special-btn">View Past Appointments</a>
-            <a href="/owner_upcoming_appointments" class="special-btn">View Upcoming Appointments</a>
+            <a href="/profile" class="btn">{{ translations['view_update_profile'] }}</a>
+            <a href="/appointment_history" class="btn">{{ translations['appointment_history'] }}</a>
+            <a href="/add_shop" class="btn">{{ translations['add_shop'] }}</a>
+            <a href="/add_service" class="btn">{{ translations['add_service'] }}</a>
+            <a href="/owner_past_appointments" class="special-btn">{{ translations['view_past_appointments'] }}</a>
+            <a href="/owner_upcoming_appointments" class="special-btn">{{ translations['view_upcoming_appointments'] }}</a>
         </div>
 
-        <button class="special-btn" onclick="toggleContent('shops')">View Your Shops</button>
+        <button class="special-btn" onclick="toggleContent('shops')">{{ translations['view_your_shops'] }}</button>
         <div id="shops" class="content">
             <ul>
                 {% if shops %}
                 {% for shop in shops %}
                 <li>
                     <h3>{{ shop['name'] }}</h3>
-                    <p>Address: {{ shop['address'] }}</p>
-                    <p>Phone: {{ shop['phone'] }}</p>
-                    <h4>Services:</h4>
+                    <p>{{ translations['address'] }}: {{ shop['address'] }}</p>
+                    <p>{{ translations['phone'] }}: {{ shop['phone'] }}</p>
+                    <h4>{{ translations['services']}}:</h4>
                     <ul>
                         {% for service in shop['services'] %}
-                        <li>{{ service['service_name'] }} - ${{ service['price'] }} ({{ service['duration'] }} minutes)</li>
+                        <li>{{ service['service_name'] }} - &#8362;{{ service['price'] }} ({{ service['duration'] }} {{ translations['minutes'] }}min)</li>
                         {% endfor %}
                     </ul>
                 </li>
                 {% endfor %}
                 {% else %}
-                <li>No shops available at the moment.</li>
-                <button type="button" onclick="goBack()">Back</button>
+                <li>{{ translations['no_shops_available'] }}</li>
+                <button type="button" onclick="goBack()">{{ translations['back'] }}</button>
                 {% endif %}
             </ul>
         </div>
 
-        <button class="special-btn" onclick="toggleContent('appointments')">View Pending Appointments</button>
+        <button class="special-btn" onclick="toggleContent('appointments')">{{ translations['view_pending_appointments'] }}</button>
         <div id="appointments" class="content">
             <ul>
                 {% set has_pending_appointments = False %}
@@ -277,15 +277,17 @@
                 {% if appointment['status'] == 'pending' %}
                 {% set has_pending_appointments = True %}
                 <li>
-                    Customer: {{ appointment['customer_name'] }}<br> Service: {{ appointment['service_name'] }}<br>
-                    Appointment Date: {{ appointment['appointment_date'] }}<br> Status: {{ appointment['status'] }}<br>
+                    {{ translations['customer'] }}: {{ appointment['customer_name'] }}<br>
+                    {{ translations['service'] }}: {{ appointment['service_name'] }}<br>
+                    {{ translations['appointment_date'] }}: {{ appointment['appointment_date'] }}<br>
+                    {{ translations['status'] }}: {{ appointment['status'] }}<br>
 
                     <form method="POST" action="/update_appointment/{{ appointment['id'] }}/confirmed">
-                        <button type="submit" class="btn">Confirm</button>
+                        <button type="submit" class="btn">{{ translations['confirm'] }}</button>
                     </form>
                     <br>
                     <form method="POST" action="/update_appointment/{{ appointment['id'] }}/canceled">
-                        <button type="submit" class="btn">Cancel</button>
+                        <button type="submit" class="btn">{{ translations['cancel'] }}</button>
                     </form>
                 </li>
                 {% endif %}
@@ -295,28 +297,28 @@
             </ul>
 
             {% if not has_pending_appointments %}
-            <p>There are no pending appointments to accept.</p>
+            <p>{{ translations['no_pending_appointments'] }}</p>
             {% endif %}
         </div>
 
-        <button class="special-btn" onclick="toggleCalendar()">View Your Appointments Calendar</button>
+        <button class="special-btn" onclick="toggleCalendar()">{{ translations['view_appointments_calendar'] }}</button>
         <div id="calendar"></div>
 
         <!-- Appointments for Today Section -->
         <div class="today-appointments-section">
-            <h2 class="today-appointments-title">Appointments for Today</h2>
+            <h2 class="today-appointments-title">{{ translations['appointments_for_today'] }}</h2>
             <ul>
                 {% if today_appointments %}
                 {% for appointment in today_appointments %}
                 <li>
-                    <strong>Customer:</strong> {{ appointment[1] }}<br>
-                    <strong>Service:</strong> {{ appointment[2] }}<br>
-                    <strong>Date:</strong> {{ appointment[0].strftime('%Y-%m-%d %H:%M') }}<br>
-                    <strong>Status:</strong> {{ appointment[3] }}
+                    <strong>{{ translations['customer'] }}:</strong> {{ appointment[1] }}<br>
+                    <strong>{{ translations['service'] }}:</strong> {{ appointment[2] }}<br>
+                    <strong>{{ translations['date'] }}:</strong> {{ appointment[0].strftime('%Y-%m-%d %H:%M') }}<br>
+                    <strong>{{ translations['status'] }}:</strong> {{ appointment[3] }}
                 </li>
                 {% endfor %}
                 {% else %}
-                <p class="no-appointments">No appointments for today.</p>
+                <p class="no-appointments">{{ translations['no_appointments_today'] }}</p>
                 {% endif %}
             </ul>
         </div>
@@ -324,16 +326,16 @@
         {% else %}
         <!-- Customer Section -->
         <div class="button-container">
-            <a href="/profile" class="btn">View/Update Profile</a>
-            <a href="/appointment_history" class="btn">View Appointment History</a>
+            <a href="/profile" class="btn">{{ translations['view_update_profile'] }}</a>
+            <a href="/appointment_history" class="btn">{{ translations['appointment_history'] }}</a>
         </div>
 
         <div class="button-container">
-            <a href="/customer_past_appointments" class="special-btn">Past Appointments</a>
-            <a href="/customer_upcoming_appointments" class="special-btn">Upcoming Appointments</a>
+            <a href="/customer_past_appointments" class="special-btn">{{ translations['view_past_appointments'] }}</a>
+            <a href="/customer_upcoming_appointments" class="special-btn">{{ translations['view_upcoming_appointments'] }}</a>
         </div>
 
-        <button class="special-btn" onclick="toggleContent('shops')">View Available Shops</button>
+        <button class="special-btn" onclick="toggleContent('shops')">{{ translations['view_available_shops'] }}</button>
         <div id="shops" class="content">
             <ul>
                 {% if shops %}
@@ -342,40 +344,46 @@
                     <h3>{{ shop[1] }}</h3>
                     <p>{{ shop[2] }}</p>
                     <p>{{ shop[3] }}</p>
-                    <a href="/book/{{ shop[0] }}" class="btn">Book Appointment at {{ shop[1] }}</a>
+                    <a href="/book/{{ shop[0] }}" class="btn">{{ translations['book_appointment'] }} {{ shop[1] }}</a>
                 </li>
                 {% endfor %}
                 {% else %}
-                <li>No shops available at the moment.</li>
-                <button type="button" onclick="goBack()">Back</button>
+                <li>{{ translations['no_shops_available'] }}</li>
+                <button type="button" onclick="goBack()">{{ translations['back'] }}</button>
                 {% endif %}
             </ul>
         </div>
 
-        <button class="special-btn" onclick="toggleContent('appointments')">View Your Appointments</button>
+        <button class="special-btn" onclick="toggleContent('appointments')">{{ translations['view_your_appointments'] }}</button>
         <div id="appointments" class="content">
             <ul>
                 {% if appointments %}
                 {% for appointment in appointments %}
                 <li>
-                    Shop: {{ appointment['shop_name'] }}<br> Service: {{ appointment['service_name'] }}<br>
-                    Appointment Date: {{ appointment['appointment_date'] }}<br> Status: {{ appointment['status'] }}<br>
+                    {{ translations['shop'] }}: {{ appointment['shop_name'] }}<br>
+                    {{ translations['service'] }}: {{ appointment['service_name'] }}<br>
+                    {{ translations['appointment_date'] }}: {{ appointment['appointment_date'] }}<br>
+                    {{ translations['status'] }}: {{ appointment['status'] }}<br>
                 </li>
                 {% endfor %}
                 {% else %}
-                <li>You have no appointments yet.</li>
+                <li>{{ translations['no_appointments'] }}</li>
                 {% endif %}
             </ul>
         </div>
 
-        <button class="special-btn" onclick="toggleCalendar()">View Your Appointments Calendar</button>
+        <button class="special-btn" onclick="toggleCalendar()">{{ translations['view_appointments_calendar'] }}</button>
         <div id="calendar"></div>
 
         {% endif %}
     </main>
 
     <footer>
-        <p>&copy; 2024 Salon Booking System By JK</p>
+        <div class="language-switcher">
+            <a href="{{ url_for('change_language', lang_code='en') }}">English</a> |
+            <a href="{{ url_for('change_language', lang_code='he') }}">עברית</a>
+        </div>
+        <p>&copy; 2024 {{ translations['footer_text'] }}</p>
     </footer>
 
     <!-- FullCalendar JS -->
@@ -402,7 +410,6 @@
                         {% for shop in shops %}
                         {% for appointment in shop['appointments'] %}
                         {
-                            title: '{{ appointment['service_name'] }}',
                             start: '{{ appointment['appointment_date'] }}',
                             color: '{% if appointment['status'] == 'confirmed' %}green{% elif appointment['status'] == 'canceled' %}red{% else %}orange{% endif %}',
                             extendedProps: {

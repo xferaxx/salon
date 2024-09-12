@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ lang }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Appointments for {{ selected_date }}</title>
+    <title>{{ translations['appointments_for'] }} {{ selected_date }}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
     <header>
-        <h1>Appointments for {{ selected_date }}</h1>
+        <h1>{{ translations['appointments_for'] }} {{ selected_date }}</h1>
     </header>
 
     <main>
@@ -16,19 +16,23 @@
         <ul>
             {% for appointment in appointments %}
             <li>
-                <strong>Customer:</strong> {{ appointment['customer_name'] }}<br>
-                <strong>Service:</strong> {{ appointment['service_name'] }}<br>
-                <strong>Time:</strong> {{ appointment['appointment_time'] }}
+                <strong>{{ translations['customer'] }}:</strong> {{ appointment['customer_name'] }}<br>
+                <strong>{{ translations['service'] }}:</strong> {{ appointment['service_name'] }}<br>
+                <strong>{{ translations['time'] }}:</strong> {{ appointment['appointment_time'] }}
             </li>
             {% endfor %}
         </ul>
         {% else %}
-        <p>No appointments available for this date.</p>
+        <p>{{ translations['no_appointments_for_date'] }}</p>
         {% endif %}
     </main>
 
     <footer>
-        <a href="/dashboard" class="btn">Back to Dashboard</a>
+         <div class="language-switcher">
+            <a href="{{ url_for('change_language', lang_code='en') }}">English</a> |
+            <a href="{{ url_for('change_language', lang_code='he') }}">עברית</a>
+        </div>
+        <a href="/dashboard" class="btn">{{ translations['back_to_dashboard'] }}</a>
     </footer>
 </body>
 </html>

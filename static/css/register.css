@@ -11,17 +11,17 @@
             flex-direction: column;
         }
 
-        header {
-            text-align: center;
+         header {
             background-color: #eac2b0;
-            padding: 20px;
-            width: 100%;
+            padding: 10px;
+            text-align: center;
+            width: 98.5%
         }
 
         header h1 {
-            margin: 0;
+            font-size: 2.5rem;
             color: #4C3B3F;
-            font-size: 2.2rem;
+            margin: 0;
         }
 
         main {
@@ -107,14 +107,14 @@
             button {
                 font-size: 0.9rem;
             }
-/* Footer */
-footer {
-    background-color: #e5b9a3;
-    color: #333;
-    text-align: center;
-    padding: 1em;
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-}
+        }
+
+        footer {
+            background-color: #eac2b0;
+            color: #4C3B3F;
+            text-align: center;
+            padding: 15px;
+            position: relative;
+            width: 97.8%;
+            bottom: 0;
         }

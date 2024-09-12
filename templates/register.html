@@ -1,44 +1,48 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ lang }}">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register</title>
+    <title>{{ translations['title'] }}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/register.css') }}">
 </head>
 
 <body>
     <header>
-        <h1>Register for Salon Booking</h1>
+        <h1>{{ translations['register'] }} {{ translations['title'] }}</h1>
     </header>
     <main>
         <form method="POST" action="/register" enctype="multipart/form-data">
-            <label for="username">Username</label>
+            <label for="username">{{ translations['username'] }}</label>
             <input type="text" id="username" name="username" required>
 
-            <label for="password">Password</label>
+            <label for="password">{{ translations['password'] }}</label>
             <input type="password" id="password" name="password" required>
 
-            <label for="email">Email</label>
+            <label for="email">{{ translations['email'] }}</label>
             <input type="email" id="email" name="email" required>
 
-            <label for="role">I am a:</label>
+            <label for="role">{{ translations['role'] }}</label>
             <select id="role" name="role" required>
-                <option value="customer">Customer</option>
-                <option value="shop_owner">Shop Owner</option>
+                <option value="customer">{{ translations['customer'] }}</option>
+                <option value="shop_owner">{{ translations['shop_owner'] }}</option>
             </select>
 
             <!-- Add Profile Picture Upload Field -->
-            <label for="profile_picture">Profile Picture (Optional)</label>
+            <label for="profile_picture">{{ translations['profile_picture'] }}</label>
             <input type="file" id="profile_picture" name="profile_picture" accept="image/*">
 
-            <button type="submit">Register</button>
-            <button type="button" onclick="goBack()">Back</button>
+            <button type="submit">{{ translations['submit'] }}</button>
+            <button type="button" onclick="goBack()">{{ translations['back'] }}</button>
         </form>
     </main>
     <footer>
-        <p>&copy; 2024 Salon Booking System By JK</p>
+        <div class="language-switcher">
+            <a href="{{ url_for('change_language', lang_code='en') }}">English</a> |
+            <a href="{{ url_for('change_language', lang_code='he') }}">עברית</a>
+        </div>
+        <p>{{ translations['footer'] }}</p>
     </footer>
     <script>
         function goBack() {

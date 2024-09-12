@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ lang }}">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Past Appointments - Customer</title>
+    <title>{{ translations['past_appointments'] }} - {{ translations['customer'] }}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <style>
         .btn {
@@ -44,11 +44,11 @@
 
 <body>
     <header>
-        <h1>Past Appointments Grouped by Shop</h1>
+        <h1>{{ translations['past_appointments_grouped_by_shop'] }}</h1>
     </header>
 
     <main>
-        <a href="/dashboard" class="special-btn">Back to Dashboard</a>
+        <a href="/dashboard" class="special-btn">{{ translations['back_to_dashboard'] }}</a>
         <br>
         <br>
         <br>
@@ -59,15 +59,15 @@
             {% for appointment in appointments %}
                 {% if current_shop != appointment[2] %}
                     <!-- Display the shop header when encountering a new shop -->
-                    <h2 class="shop-header">Appointments at {{ appointment[2] }}</h2> <!-- Shop name -->
+                    <h2 class="shop-header">{{ translations['appointments_at'] }} {{ appointment[2] }}</h2> <!-- Shop name -->
                 {% endif %}
 
                 <!-- Display each appointment for the current shop -->
                 <div class="appointment-details">
-                    <strong>Service:</strong> {{ appointment[3] }}<br>
-                    <strong>Date:</strong> {{ appointment[0] }}<br>
-                    <strong>Status:</strong> {{ appointment[1] }}<br>
-                    <strong>Price:</strong> ${{ appointment[4] }}
+                    <strong>{{ translations['service'] }}:</strong> {{ appointment[3] }}<br>
+                    <strong>{{ translations['date'] }}:</strong> {{ appointment[0] }}<br>
+                    <strong>{{ translations['status'] }}:</strong> {{ appointment[1] }}<br>
+                    <strong>{{ translations['price'] }}:</strong> &#8362;{{ appointment[4] }}
                 </div>
                 <br>
                 <!-- Update the current_shop after processing this appointment -->
@@ -75,7 +75,7 @@
             {% endfor %}
 
         {% else %}
-            <p>No past appointments found.</p>
+            <p>{{ translations['no_past_appointments_found'] }}</p>
         {% endif %}
     </main>
 </body>

@@ -1,74 +1,67 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ lang }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Salon & Beauty Shop</title>
+    <title>{{ translations['salon_title'] }}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-
 </head>
 <body>
     <header>
-        <h1>Salon & Beauty Shop Center</h1>
-
-
-
-
+        <h1>{{ translations['salon_center'] }}</h1>
     </header>
 
-        <div class="center-container">
-             <a href="/register" class="logout-btn">Register</a>&nbsp;&nbsp;&nbsp;
-             <a href="/login" class="logout-btn">Login</a>
-        </div>
-
-
+    <div class="center-container">
+        <a href="/register" class="logout-btn">{{ translations['register'] }}</a>&nbsp;&nbsp;&nbsp;
+        <a href="/login" class="logout-btn">{{ translations['login'] }}</a>
+    </div>
 
     <main>
         <section class="hero">
             <div class="hero-content">
-
-
-
-                <h2>Welcome</h2>
-                <h2>Your Beauty, Our Passion</h2>
-                <h1>Book an appointment with the best salons in town for a delightful beauty experience. Choose from a wide range of services to look and feel your best.</h1>
+                <h2>{{ translations['welcome'] }}</h2>
+                <h2>{{ translations['tagline'] }}</h2>
+                <h1>{{ translations['description'] }}</h1>
                 <br>
-                <a href="/register" class="btn-primary">Get Started</a>
+                <a href="/register" class="btn-primary">{{ translations['get_started'] }}</a>
                 <br>
             </div>
         </section>
 
-
         <section class="services">
-            <h2>Our Services</h2>
+            <h2>{{ translations['our_services'] }}</h2>
             <div class="service-grid">
                 <div class="service">
-                    <img src="{{ url_for('static', filename='images/hair.png') }}" alt="Hair Styling">
-                    <h3>Hair Styling</h3>
-                    <p>Get a fresh haircut or style that matches your personality.</p>
+                    <img src="{{ url_for('static', filename='images/hair.png') }}" alt="{{ translations['hair_styling'] }}">
+                    <h3>{{ translations['hair_styling'] }}</h3>
+                    <p>{{ translations['hair_description'] }}</p>
                 </div>
                 <div class="service">
-                    <img src="{{ url_for('static', filename='images/nails.png') }}" alt="Nail Services">
-                    <h3>Nail Services</h3>
-                    <p>Manicure, pedicure, and nail art designed to make you stand out.</p>
+                    <img src="{{ url_for('static', filename='images/nails.png') }}" alt="{{ translations['nail_services'] }}">
+                    <h3>{{ translations['nail_services'] }}</h3>
+                    <p>{{ translations['nail_description'] }}</p>
                 </div>
                 <div class="service">
-                    <img src="{{ url_for('static', filename='images/spa.png') }}" alt="Spa Treatments">
-                    <h3>Spa Treatments</h3>
-                    <p>Relax and unwind with our luxurious spa services.</p>
+                    <img src="{{ url_for('static', filename='images/spa.png') }}" alt="{{ translations['spa_treatments'] }}">
+                    <h3>{{ translations['spa_treatments'] }}</h3>
+                    <p>{{ translations['spa_description'] }}</p>
                 </div>
             </div>
         </section>
     </main>
-    <br>
-    <br>
+    <br><br>
     <footer>
-        <p>&copy; 2024 Salon & Beauty Shop Appointment System By JK</p>
+        <div class="language-switcher">
+            <a href="{{ url_for('change_language', lang_code='en') }}">English</a> |
+            <a href="{{ url_for('change_language', lang_code='he') }}">עברית</a>
+        </div>
+        <p>&copy; 2024 {{ translations['footer_text'] }} By JK</p>
     </footer>
 
     <!-- Bootstrap JS (Optional for extra features like modals or dropdowns) -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>

@@ -1,36 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ lang }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shops List</title>
+    <title>{{ translations['shops_list'] }}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
     <header>
-        <h1>Available Shops</h1>
+        <h1>{{ translations['available_shops'] }}</h1>
     </header>
     <main>
         <ul>
-    {% for shop in shops %}
-    <li>
-
-        <h3>{{ shop[1] }}</h3> <!-- Shop name -->
-        <p>{{ shop[2] }}</p> <!-- Shop address -->
-        <p>{{ shop[3] }}</p> <!-- Shop phone -->
-        <a href="/book/{{ shop[0] }}">Book Appointment</a> <!-- Shop ID -->
-        <p>Shop ID: {{ shop[0] }}</p> <!-- For debugging -->
-    </li>
-    {% endfor %}
-</ul>
-        <button type="button" onclick="goBack()">Back</button>
-
-
+            {% for shop in shops %}
+            <li>
+                <h3>{{ shop[1] }}</h3> <!-- Shop name -->
+                <p>{{ shop[2] }}</p> <!-- Shop address -->
+                <p>{{ shop[3] }}</p> <!-- Shop phone -->
+                <a href="/book/{{ shop[0] }}">{{ translations['book_appointment'] }}</a> <!-- Shop ID -->
+                <p>{{ translations['shop_id'] }}: {{ shop[0] }}</p> <!-- For debugging -->
+            </li>
+            {% endfor %}
+        </ul>
+        <button type="button" onclick="goBack()">{{ translations['back'] }}</button>
     </main>
     <footer>
-        <p>&copy; 2024 Salon Booking System By JK</p>
+        <div class="language-switcher">
+            <a href="{{ url_for('change_language', lang_code='en') }}">English</a> |
+            <a href="{{ url_for('change_language', lang_code='he') }}">עברית</a>
+        </div>
+        <p>&copy; 2024 {{ translations['salon_booking_system'] }} By JK</p>
     </footer>
- <script>
+    <script>
         function goBack() {
             window.history.back();
         }

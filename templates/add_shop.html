@@ -1,35 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ lang }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Shop</title>
+    <title>{{ translations['add_shop_title'] }}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/register.css') }}">
 </head>
 <body>
     <header>
-        <h1>Add a New Shop</h1>
+        <h1>{{ translations['add_shop_header'] }}</h1>
     </header>
     <main>
         <form method="POST" action="/add_shop">
-            <label for="shop_name">Shop Name:</label>
+            <label for="shop_name">{{ translations['shop_name_label'] }}:</label>
             <input type="text" id="shop_name" name="shop_name" required>
 
-            <label for="address">Address:</label>
+            <label for="address">{{ translations['address_label'] }}:</label>
             <input type="text" id="address" name="address" required>
 
-            <label for="phone">Phone:</label>
+            <label for="phone">{{ translations['phone_label'] }}:</label>
             <input type="text" id="phone" name="phone" required>
 
-
-
-            <button type="submit">Add Shop</button>
+            <button type="submit">{{ translations['add_shop_button'] }}</button>
             <!-- Back button -->
-            <button type="button" onclick="goBack()">Back</button>
+            <button type="button" onclick="goBack()">{{ translations['back_button'] }}</button>
         </form>
     </main>
     <footer>
-        <p>&copy; 2024 Salon Booking System By JK</p>
+        <div class="language-switcher">
+            <a href="{{ url_for('change_language', lang_code='en') }}">English</a> |
+            <a href="{{ url_for('change_language', lang_code='he') }}">עברית</a>
+        </div>
+        <p>&copy; 2024 {{ translations['footer_text'] }}</p>
     </footer>
 
     <script>

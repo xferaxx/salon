@@ -1,34 +1,38 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ lang }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Book Appointment</title>
+    <title>{{ translations['book_appointment'] }} {{ shop_name }}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/register.css') }}">
 </head>
 <body>
     <header>
-        <h1>Book an Appointment at {{ shop_name }}</h1>
+        <h1>{{ translations['book_appointment_at'] }} {{ shop_name }}</h1>
     </header>
     <main>
         <form method="POST" action="/book/{{ shop_id }}">
             <!-- Date selection -->
-            <label for="appointment_date">Choose Appointment Date:</label>
+            <label for="appointment_date">{{ translations['choose_appointment_date'] }}:</label>
             <input type="datetime-local" id="appointment_date" name="appointment_date" required>
 
             <!-- Service selection -->
-            <label for="service_id">Select Service:</label>
+            <label for="service_id">{{ translations['select_service'] }}:</label>
             <select id="service_id" name="service_id" required>
                 {% for service in services %}
-                <option value="{{ service[0] }}">{{ service[1] }} - ${{ service[2] }}</option>
+                <option value="{{ service[0] }}">{{ service[1] }} - &#8362;{{ service[2] }}</option>
                 {% endfor %}
             </select>
 
-            <button type="submit">Book Appointment</button>
-            <button type="button" onclick="goBack()">Back</button>
+            <button type="submit">{{ translations['book_appointment'] }}</button>
+            <button type="button" onclick="goBack()">{{ translations['back'] }}</button>
         </form>
     </main>
     <footer>
+         <div class="language-switcher">
+            <a href="{{ url_for('change_language', lang_code='en') }}">English</a> |
+            <a href="{{ url_for('change_language', lang_code='he') }}">עברית</a>
+        </div>
         <p>&copy; 2024 Salon Booking System By JK</p>
     </footer>
 <script>
