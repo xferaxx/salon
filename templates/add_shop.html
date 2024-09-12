@@ -11,7 +11,7 @@
         <h1>{{ translations['add_shop_header'] }}</h1>
     </header>
     <main>
-        <form method="POST" action="/add_shop">
+        <form method="POST" action="/add_shop" enctype="multipart/form-data">
             <label for="shop_name">{{ translations['shop_name_label'] }}:</label>
             <input type="text" id="shop_name" name="shop_name" required>
 
@@ -21,8 +21,10 @@
             <label for="phone">{{ translations['phone_label'] }}:</label>
             <input type="text" id="phone" name="phone" required>
 
+            <label for="image">{{ translations['upload_image'] }}:</label>
+            <input type="file" id="image" name="image" accept="image/*">
+
             <button type="submit">{{ translations['add_shop_button'] }}</button>
-            <!-- Back button -->
             <button type="button" onclick="goBack()">{{ translations['back_button'] }}</button>
         </form>
     </main>

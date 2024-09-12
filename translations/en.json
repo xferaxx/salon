@@ -10,7 +10,7 @@
         "nail_services": "Nail Services",
         "spa_treatments": "Spa Treatments",
         "get_started": "Get Started",
-        "footer": "&copy; 2024 Salon & Beauty Shop Appointment System By JK",
+        "footer": "2024 Salon & Beauty Shop Appointment System By JK",
         "username": "Username",
         "password": "Password",
         "email": "Email",
@@ -106,5 +106,6 @@
         "our_services": "Our Services",
         "hair_description": "Get a fresh haircut or style that matches your personality.",
         "nail_description": "Manicure, pedicure, and nail art designed to make you stand out.",
-        "spa_description": "Relax and unwind with our luxurious spa services."
+        "spa_description": "Relax and unwind with our luxurious spa services.",
+        "upload_image": "upload_image"
 }

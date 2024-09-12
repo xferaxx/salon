@@ -11,16 +11,23 @@
         <h1>{{ translations['available_shops'] }}</h1>
     </header>
     <main>
-        <ul>
-            {% for shop in shops %}
-            <li>
-                <h3>{{ shop[1] }}</h3> <!-- Shop name -->
-                <p>{{ shop[2] }}</p> <!-- Shop address -->
-                <p>{{ shop[3] }}</p> <!-- Shop phone -->
-                <a href="/book/{{ shop[0] }}">{{ translations['book_appointment'] }}</a> <!-- Shop ID -->
-                <p>{{ translations['shop_id'] }}: {{ shop[0] }}</p> <!-- For debugging -->
-            </li>
-            {% endfor %}
+    <ul>
+        {% for shop in shops %}
+        <li>
+            <h3>{{ shop[1] }}</h3> <!-- Shop name -->
+            <p>{{ shop[2] }}</p> <!-- Shop address -->
+            <p>{{ shop[3] }}</p> <!-- Shop phone -->
+
+            <!-- Display the shop image if available -->
+            {% if shop[4] %}
+            <img src="{{ url_for('static', filename='uploads/' + shop[4]) }}" alt="Shop Image" style="width: 100px; height: 100px; object-fit: cover;">
+            {% else %}
+            <img src="{{ url_for('static', filename='uploads/default_profile.jpg') }}" alt="No Shop Image" style="width: 100px; height: 100px; object-fit: cover;">
+            {% endif %}
+
+            <a href="/book/{{ shop[0] }}" class="btn">{{ translations['book_appointment'] }} {{ shop[1] }}</a>
+        </li>
+        {% endfor %}
         </ul>
         <button type="button" onclick="goBack()">{{ translations['back'] }}</button>
     </main>

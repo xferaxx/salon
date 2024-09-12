@@ -404,7 +404,7 @@ def dashboard():
     # Customer Dashboard
     else:
         # Fetch the list of approved shops (only show shops where is_approved = TRUE)
-        cursor.execute("SELECT id, name, address, phone FROM shops WHERE is_approved = TRUE")
+        cursor.execute("SELECT id, name, address, phone, image FROM shops WHERE is_approved = TRUE")
         shops = cursor.fetchall()
 
         # Fetch appointments for the customer
@@ -430,7 +430,6 @@ def dashboard():
                                lang=language)
 
 
-# Route to add a new shop (for shop owners only)
 @app.route('/add_shop', methods=['GET', 'POST'])
 def add_shop():
     if 'user_id' not in session or session['role'] != 'shop_owner':
@@ -447,13 +446,26 @@ def add_shop():
         address = request.form['address']
         phone = request.form['phone']
 
-        # Insert the new shop into the database with 'is_approved' set to FALSE
+        # Check if an image file was uploaded
+        if 'image' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+        image_file = request.files['image']
+
+        if image_file and allowed_file(image_file.filename):
+            # Secure the filename and save it to the uploads folder
+            filename = secure_filename(image_file.filename)
+            image_file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        else:
+            filename = None  # No file uploaded or invalid file type
+
+        # Insert the new shop into the database with the uploaded image filename
         db = connect_db()
         cursor = db.cursor()
         cursor.execute("""
-            INSERT INTO shops (owner_id, name, address, phone, is_approved)
-            VALUES (%s, %s, %s, %s, %s)
-        """, (session['user_id'], shop_name, address, phone, False))
+            INSERT INTO shops (owner_id, name, address, phone, image, is_approved)
+            VALUES (%s, %s, %s, %s, %s, %s)
+        """, (session['user_id'], shop_name, address, phone, filename, False))
         db.commit()
         db.close()
 
@@ -468,7 +480,7 @@ def shop_list():
     db = connect_db()
     cursor = db.cursor()
     # Only fetch shops where is_approved is TRUE
-    cursor.execute("SELECT id, name, address, phone FROM shops WHERE is_approved = TRUE")
+    cursor.execute("SELECT id, name, address, phone, image FROM shops WHERE is_approved = TRUE")
     shops = cursor.fetchall()
     db.close()
 

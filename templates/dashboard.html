@@ -243,12 +243,24 @@
             <a href="/owner_upcoming_appointments" class="special-btn">{{ translations['view_upcoming_appointments'] }}</a>
         </div>
 
+
+
+
         <button class="special-btn" onclick="toggleContent('shops')">{{ translations['view_your_shops'] }}</button>
         <div id="shops" class="content">
             <ul>
                 {% if shops %}
                 {% for shop in shops %}
                 <li>
+                    <!-- Display the shop image if available -->
+                    {% if shop[4] %}
+                    <img src="{{ url_for('static', filename='uploads/' + shop[4]) }}" alt="Shop Image"
+                    style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 2px solid #4C3B3F; margin-right: 20px;">
+                    {% else %}
+                    <img src="{{ url_for('static', filename='uploads/default_profile.jpg') }}" alt="No Shop Image"
+                    style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 2px solid #4C3B3F; margin-right: 20px;">
+                    {% endif %}
+
                     <h3>{{ shop['name'] }}</h3>
                     <p>{{ translations['address'] }}: {{ shop['address'] }}</p>
                     <p>{{ translations['phone'] }}: {{ shop['phone'] }}</p>
@@ -266,6 +278,9 @@
                 {% endif %}
             </ul>
         </div>
+
+
+
 
         <button class="special-btn" onclick="toggleContent('appointments')">{{ translations['view_pending_appointments'] }}</button>
         <div id="appointments" class="content">
@@ -301,6 +316,10 @@
             {% endif %}
         </div>
 
+
+
+
+
         <button class="special-btn" onclick="toggleCalendar()">{{ translations['view_appointments_calendar'] }}</button>
         <div id="calendar"></div>
 
@@ -335,16 +354,34 @@
             <a href="/customer_upcoming_appointments" class="special-btn">{{ translations['view_upcoming_appointments'] }}</a>
         </div>
 
+
+        <!-- View Approved Shops in CUSTOMER Dashboard with image -->
         <button class="special-btn" onclick="toggleContent('shops')">{{ translations['view_available_shops'] }}</button>
         <div id="shops" class="content">
             <ul>
                 {% if shops %}
                 {% for shop in shops %}
-                <li>
-                    <h3>{{ shop[1] }}</h3>
-                    <p>{{ shop[2] }}</p>
-                    <p>{{ shop[3] }}</p>
-                    <a href="/book/{{ shop[0] }}" class="btn">{{ translations['book_appointment'] }} {{ shop[1] }}</a>
+                <li style="display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
+                    <!-- Display the shop image if available -->
+                    {% if shop[4] %}
+                    <img src="{{ url_for('static', filename='uploads/' + shop[4]) }}" alt="Shop Image"
+                    style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 2px solid #4C3B3F; margin-right: 20px;">
+                    {% else %}
+                    <img src="{{ url_for('static', filename='uploads/default_profile.jpg') }}" alt="No Shop Image"
+                    style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 2px solid #4C3B3F; margin-right: 20px;">
+                    {% endif %}
+
+                    <!-- Container for the shop's name, address, phone, and button -->
+                    <div style="text-align: center;">
+                    <h3>{{ shop[1] }}</h3> <!-- Shop name -->
+                    <p>{{ shop[2] }}</p> <!-- Shop address -->
+                    <p>{{ shop[3] }}</p> <!-- Shop phone -->
+                    <br>
+                    <a href="/book/{{ shop[0] }}" class="btn"
+                    style="display: inline-block; padding: 10px 20px; background-color: #4CAF50; color: white; text-decoration: none; border-radius: 5px;">
+                        {{ translations['book_appointment'] }} {{ shop[1] }}
+                    </a>
+                    </div>
                 </li>
                 {% endfor %}
                 {% else %}
@@ -353,6 +390,9 @@
                 {% endif %}
             </ul>
         </div>
+
+
+
 
         <button class="special-btn" onclick="toggleContent('appointments')">{{ translations['view_your_appointments'] }}</button>
         <div id="appointments" class="content">
