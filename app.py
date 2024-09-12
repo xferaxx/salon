@@ -203,23 +203,30 @@ def register():
         role = request.form['role']
 
         # Handle file upload
-        profile_picture = request.files['profile_picture']
+        profile_picture = request.files.get('profile_picture')
         profile_picture_filename = None
 
-        if profile_picture and allowed_file(profile_picture.filename):
-            # Save the file in the uploads directory
-            filename = secure_filename(profile_picture.filename)
-            profile_picture.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            profile_picture_filename = filename
+        # If no profile picture is uploaded, assign a default one
+        if profile_picture and profile_picture.filename != '':
+            if allowed_file(profile_picture.filename):
+                # Save the uploaded file
+                filename = secure_filename(profile_picture.filename)
+                profile_picture.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                profile_picture_filename = filename
+        else:
+            # Assign default image if none uploaded
+            profile_picture_filename = 'default_profile.jpg'  # Assuming this is the default image in 'static/uploads/'
 
+        # Connect to the database
         db = connect_db()
         cursor = db.cursor()
 
-        # Insert user into the database with the profile picture
+        # Insert the new user into the database
         cursor.execute("""
             INSERT INTO users (username, password, email, role, profile_picture)
             VALUES (%s, %s, %s, %s, %s)
         """, (username, password, email, role, profile_picture_filename))
+
         db.commit()
         db.close()
 
