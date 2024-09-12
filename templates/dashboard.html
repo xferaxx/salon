@@ -68,6 +68,8 @@
     text-decoration: none;
     transition: background-color 0.3s ease;
     margin: 5px; /* Reduced margin */
+    width: 100%; /* Makes sure the button takes up the full width of its container */
+    text-align: center; /* Centers the text inside the button */
 }
 
 
@@ -165,21 +167,33 @@
         /* For screens smaller than 768px (tablets and phones) */
 @media (max-width: 768px) {
     .btn {
-        padding: 6px 12px; /* Slightly smaller padding */
-        font-size: 0.75rem; /* Reduced font size */
-        margin: 6px; /* Reduced margin */
-        border-radius: 6px; /* Slightly smaller border-radius */
+        padding: 5px 10px; /* Slightly smaller padding */
+        font-size: 0.6rem; /* Reduced font size */
+        margin: 5px; /* Reduced margin */
+        border-radius: 5px; /* Slightly smaller border-radius */
     }
 }
 
 /* For screens smaller than 480px (phones) */
 @media (max-width: 480px) {
     .btn {
-        padding: 4px 8px; /* Smaller padding */
+        padding: 3px 6px; /* Smaller padding */
         font-size: 0.65rem; /* Smaller font size */
-        margin: 4px; /* Smaller margin */
-        border-radius: 4px; /* Smaller border-radius */
-        width: 100%; /* Full width for smaller screens */
+        margin: 3px; /* Smaller margin */
+        border-radius: 3px; /* Smaller border-radius */
+        width: 95%; /* Full width for smaller screens */
+    }
+}
+
+
+/* For screens smaller than 480px (phones) */
+@media (max-width: 430px) {
+    .btn {
+        padding: 3px 6px; /* Smaller padding */
+        font-size: 0.65rem; /* Smaller font size */
+        margin: 3px; /* Smaller margin */
+        border-radius: 3px; /* Smaller border-radius */
+        width: 95%; /* Full width for smaller screens */
     }
 }
 
