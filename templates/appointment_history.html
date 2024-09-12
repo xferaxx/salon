@@ -62,6 +62,10 @@
                     </ul>
                     <!-- Total for this customer -->
                     <h4>Total for {{ customer }}: ${{ '%.2f' % appointments | sum(attribute=4) }}</h4>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
                 </div>
             {% endfor %}
         {% else %}
@@ -75,12 +79,21 @@
                         Shop: {{ appointment[2] }}<br>
                         Service: {{ appointment[3] }}<br>
                         Price: ${{ '%.2f' % appointment[4] }}
+                        <br>
+                        <br>
                     </li>
                     {% endfor %}
+
+
+                <!-- Total for this customer -->
+
                 {% else %}
                     <li>No past appointments.</li>
                 {% endif %}
             </ul>
+            <br>
+            <br>
+
         {% endif %}
     </main>
     <footer>
