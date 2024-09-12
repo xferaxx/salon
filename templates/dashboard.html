@@ -30,19 +30,19 @@
         }
 
         .fc-event:hover::after {
-    content: attr(data-title);
-    position: absolute;
-    background-color: rgba(0, 0, 0, 0.7);
-    color: white;
-    padding: 10px;
-    border-radius: 5px;
-    white-space: nowrap;
-    z-index: 1000;
-    font-size: 0.9rem;
-    transform: translate(-50%, -100%); /* Adjust the positioning */
-    margin-top: -10px; /* Give some space above the tooltip */
-    margin-left: -20px;
-}
+            content: attr(data-title);
+            position: absolute;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            white-space: nowrap;
+            z-index: 1000;
+            font-size: 0.9rem;
+            transform: translate(-50%, -100%);
+            margin-top: -10px;
+            margin-left: -20px;
+        }
 
         main {
             padding: 20px;
@@ -57,7 +57,6 @@
             margin-bottom: 20px;
         }
 
-        /* Smaller Buttons */
         .btn {
             background-color: #4CAF50;
             color: white;
@@ -93,7 +92,6 @@
             background-color: #d39b87;
         }
 
-        /* Hidden content for shops and appointments */
         .content {
             display: none;
             margin-top: 15px;
@@ -117,7 +115,7 @@
         }
 
         #calendar {
-            display: none; /* Hide calendar initially */
+            display: none;
             max-width: 100%;
             margin: 0 auto;
             padding: 20px;
@@ -139,6 +137,16 @@
             padding: 10px 15px;
             border-radius: 5px;
             color: #d39b87;
+        }
+
+        .appointments-title {
+            background-color: #eac2b0;
+            padding: 15px;
+            text-align: center;
+            border-radius: 5px;
+            color: #4C3B3F;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
         }
 
         footer {
@@ -177,6 +185,26 @@
                 padding: 10px;
             }
         }
+
+        /* Styling for today's appointments section */
+        .today-appointments-section {
+            background-color: #f2d6c6;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            border: 1px solid #eac2b0;
+        }
+
+        .today-appointments-title {
+            font-size: 1.5rem;
+            color: #4C3B3F;
+            margin-bottom: 10px;
+        }
+
+        .no-appointments {
+            font-size: 1.2rem;
+            color: #4C3B3F;
+        }
     </style>
 </head>
 
@@ -184,9 +212,7 @@
     <header>
         <h1>Dashboard</h1>
         <div class="header-right">
-            <p class="welcome-message">
-                Welcome, {{ username }}
-            </p>
+            <p class="welcome-message">Welcome, {{ username }}</p>
 
             <!-- Display the profile picture -->
             <div class="profile-section">
@@ -198,17 +224,16 @@
                 {% endif %}
             </div>
             &nbsp;&nbsp;&nbsp;
-
         </div>
     </header>
-        <div class="center-container">
-             <a href="/logout" class="logout-btn">Logout</a>
-        </div>
-
+    <div class="center-container">
+        <a href="/logout" class="logout-btn">Logout</a>
+    </div>
     <main>
 
         {% if session['role'] == 'shop_owner' %}
         <!-- Shop Owner Section -->
+
         <div class="button-container">
             <a href="/profile" class="btn">View/Update Profile</a>
             <a href="/appointment_history" class="btn">View Appointment History</a>
@@ -230,8 +255,7 @@
                     <h4>Services:</h4>
                     <ul>
                         {% for service in shop['services'] %}
-                        <li>{{ service['service_name'] }} - ${{ service['price'] }} ({{ service['duration'] }} minutes)
-                        </li>
+                        <li>{{ service['service_name'] }} - ${{ service['price'] }} ({{ service['duration'] }} minutes)</li>
                         {% endfor %}
                     </ul>
                 </li>
@@ -278,6 +302,24 @@
         <button class="special-btn" onclick="toggleCalendar()">View Your Appointments Calendar</button>
         <div id="calendar"></div>
 
+        <!-- Appointments for Today Section -->
+        <div class="today-appointments-section">
+            <h2 class="today-appointments-title">Appointments for Today</h2>
+            <ul>
+                {% if today_appointments %}
+                {% for appointment in today_appointments %}
+                <li>
+                    <strong>Customer:</strong> {{ appointment[1] }}<br>
+                    <strong>Service:</strong> {{ appointment[2] }}<br>
+                    <strong>Date:</strong> {{ appointment[0].strftime('%Y-%m-%d %H:%M') }}<br>
+                    <strong>Status:</strong> {{ appointment[3] }}
+                </li>
+                {% endfor %}
+                {% else %}
+                <p class="no-appointments">No appointments for today.</p>
+                {% endif %}
+            </ul>
+        </div>
 
         {% else %}
         <!-- Customer Section -->
@@ -333,7 +375,7 @@
     </main>
 
     <footer>
-        <p>&copy; 2024 Salon Booking System</p>
+        <p>&copy; 2024 Salon Booking System By JK</p>
     </footer>
 
     <!-- FullCalendar JS -->
@@ -381,14 +423,14 @@
                         {% endfor %}
                         {% endif %}
                     ],
-                     dateClick: function(info) {
-                    // When a date is clicked, redirect to another form and pass the clicked date
-                    window.location.href = '/appointments?date=' + info.dateStr;
-                },
-                eventDidMount: function(info) {
-                    var tooltipText = info.event.extendedProps.dataTitle;
-                    info.el.setAttribute('data-title', tooltipText);
-                }
+                    dateClick: function(info) {
+                        // When a date is clicked, redirect to another form and pass the clicked date
+                        window.location.href = '/appointments?date=' + info.dateStr;
+                    },
+                    eventDidMount: function(info) {
+                        var tooltipText = info.event.extendedProps.dataTitle;
+                        info.el.setAttribute('data-title', tooltipText);
+                    }
                 });
                 calendar.render();
             } else {
