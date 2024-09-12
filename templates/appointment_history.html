@@ -69,6 +69,7 @@
                 </div>
             {% endfor %}
         {% else %}
+
             <!-- Display history for customers (non-shop owners) -->
             <ul>
                 {% if history %}
@@ -83,14 +84,11 @@
                         <br>
                     </li>
                     {% endfor %}
-
-
-                <!-- Total for this customer -->
-
                 {% else %}
                     <li>No past appointments.</li>
                 {% endif %}
             </ul>
+            <h4>Total for {{ customer }}: ${{ '%.2f' % history | sum(attribute=4) }}</h4>
             <br>
             <br>
 
