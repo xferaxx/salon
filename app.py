@@ -56,7 +56,7 @@ def show_appointments():
 
     # Check if the logged-in user is a customer or shop owner
     if session['role'] == 'customer':
-        # Query appointments for the logged-in customer on the selected date
+        # Query appointments for the logged-in customer on the selected date, sorted by the soonest appointment first
         cursor.execute("""
             SELECT users.username, services.service_name, appointments.appointment_date 
             FROM appointments 
@@ -65,10 +65,12 @@ def show_appointments():
             WHERE appointments.customer_id = %s
             AND appointments.appointment_date >= %s 
             AND appointments.appointment_date < %s
+            ORDER BY appointments.appointment_date ASC  -- Sort by the soonest appointment first
         """, (session['user_id'], selected_date_start, selected_date_end))
 
     elif session['role'] == 'shop_owner':
-        # Query appointments for the shop(s) owned by the logged-in shop owner on the selected date
+        # Query appointments for the shop(s) owned by the logged-in shop owner on the selected date, sorted by the
+        # soonest appointment first
         cursor.execute("""
             SELECT users.username, services.service_name, appointments.appointment_date 
             FROM appointments 
@@ -78,6 +80,7 @@ def show_appointments():
             WHERE shops.owner_id = %s
             AND appointments.appointment_date >= %s 
             AND appointments.appointment_date < %s
+            ORDER BY appointments.appointment_date ASC  -- Sort by the soonest appointment first
         """, (session['user_id'], selected_date_start, selected_date_end))
 
     appointments = cursor.fetchall()
@@ -91,7 +94,6 @@ def show_appointments():
     ]
 
     return render_template('appointments.html', appointments=appointment_list, selected_date=selected_date)
-
 
 
 # Mock function for querying appointments (replace this with actual database logic)
@@ -293,6 +295,21 @@ def dashboard():
         cursor.execute("SELECT id, name, address, phone FROM shops WHERE owner_id = %s", (session['user_id'],))
         shops = cursor.fetchall()
 
+        # Get current date in YYYY-MM-DD format
+        current_date = datetime.now().date()
+
+        # Fetch appointments for today for each shop owned by the shop owner
+        cursor.execute("""
+            SELECT appointments.appointment_date, users.username, services.service_name, appointments.status 
+            FROM appointments 
+            JOIN users ON appointments.customer_id = users.id 
+            JOIN services ON appointments.service_id = services.id 
+            WHERE appointments.shop_id IN (SELECT id FROM shops WHERE owner_id = %s)
+            AND DATE(appointments.appointment_date) = %s
+            """, (session['user_id'], current_date))
+
+        today_appointments = cursor.fetchall()
+
         shop_data = []
         for shop in shops:
             shop_dict = {
@@ -336,7 +353,9 @@ def dashboard():
             shop_data.append(shop_dict)
 
         db.close()
-        return render_template('dashboard.html', shops=shop_data, username=username, profile_picture=profile_picture)
+
+        # Rendering the updated dashboard with today's appointments
+        return render_template('dashboard.html', shops=shop_data, username=username, profile_picture=profile_picture, today_appointments=today_appointments)
 
     # Customer Dashboard
     else:
@@ -558,7 +577,7 @@ def appointment_history():
     db = connect_db()
     cursor = db.cursor()
 
-    # Fetch appointment history for shop owner, grouped by customer
+    # Fetch appointment history for shop owners, grouped by customer, and ordered by the latest date first
     if session['role'] == 'shop_owner':
         cursor.execute("""
             SELECT appointments.appointment_date, appointments.status, users.username, services.service_name, services.price
@@ -567,6 +586,7 @@ def appointment_history():
             JOIN services ON appointments.service_id = services.id
             WHERE appointments.shop_id IN (SELECT id FROM shops WHERE owner_id = %s)
             AND appointments.status IN ('confirmed', 'canceled', 'completed')
+            ORDER BY appointments.appointment_date DESC, users.username  -- Sort by date (latest first) and then by username
         """, (session['user_id'],))
         history = cursor.fetchall()
 
@@ -579,7 +599,7 @@ def appointment_history():
             customers[customer_name].append(appointment)
 
     else:
-        # Fetch appointment history for customers
+        # Fetch appointment history for customers, ordered by the latest date first
         cursor.execute("""
             SELECT appointments.appointment_date, appointments.status, shops.name, services.service_name, services.price
             FROM appointments
@@ -587,6 +607,7 @@ def appointment_history():
             JOIN services ON appointments.service_id = services.id
             WHERE appointments.customer_id = %s
             AND appointments.status IN ('confirmed', 'canceled', 'completed')
+            ORDER BY appointments.appointment_date DESC  -- Sort by date (latest first)
         """, (session['user_id'],))
         history = cursor.fetchall()
         customers = None  # No need for customer grouping for regular users
@@ -594,6 +615,61 @@ def appointment_history():
     db.close()
 
     return render_template('appointment_history.html', history=history, customers=customers)
+
+
+
+# Route for customers to view past appointments
+@app.route('/customer_past_appointments')
+def customer_past_appointments():
+    if 'user_id' not in session or session['role'] != 'customer':
+        return redirect(url_for('login'))
+
+    db = connect_db()
+    cursor = db.cursor()
+    current_date = datetime.now()
+
+    # Fetch past appointments for the customer, ordered by the latest date first
+    cursor.execute("""
+        SELECT appointments.appointment_date, appointments.status, shops.name, services.service_name, services.price
+        FROM appointments
+        JOIN shops ON appointments.shop_id = shops.id
+        JOIN services ON appointments.service_id = services.id
+        WHERE appointments.customer_id = %s
+        AND appointments.appointment_date < %s
+        ORDER BY appointments.appointment_date DESC, shops.name  -- Sort by appointment date in descending order
+    """, (session['user_id'], current_date))
+
+    past_appointments = cursor.fetchall()
+    db.close()
+
+    return render_template('customer_past_appointments.html', appointments=past_appointments)
+
+
+# Route for customers to view upcoming appointments
+@app.route('/customer_upcoming_appointments')
+def customer_upcoming_appointments():
+    if 'user_id' not in session or session['role'] != 'customer':
+        return redirect(url_for('login'))
+
+    db = connect_db()
+    cursor = db.cursor()
+    current_date = datetime.now()
+
+    # Fetch upcoming appointments for the customer and order them by the earliest date first
+    cursor.execute("""
+        SELECT appointments.appointment_date, appointments.status, shops.name, services.service_name, services.price
+        FROM appointments
+        JOIN shops ON appointments.shop_id = shops.id
+        JOIN services ON appointments.service_id = services.id
+        WHERE appointments.customer_id = %s
+        AND appointments.appointment_date >= %s
+        ORDER BY appointments.appointment_date ASC  -- This sorts by date in ascending order
+    """, (session['user_id'], current_date))
+
+    upcoming_appointments = cursor.fetchall()
+    db.close()
+
+    return render_template('customer_upcoming_appointments.html', appointments=upcoming_appointments)
 
 
 # Route for shop owners to view past appointments
@@ -606,7 +682,7 @@ def owner_past_appointments():
     cursor = db.cursor()
     current_date = datetime.now()
 
-    # Fetch past appointments for the shop owner
+    # Fetch past appointments for the shop owner, ordered by the latest date first
     cursor.execute("""
         SELECT appointments.appointment_date, appointments.status, users.username, services.service_name, services.price
         FROM appointments
@@ -614,8 +690,9 @@ def owner_past_appointments():
         JOIN services ON appointments.service_id = services.id
         WHERE appointments.shop_id IN (SELECT id FROM shops WHERE owner_id = %s)
         AND appointments.appointment_date < %s
-        ORDER BY users.username, appointments.appointment_date
+        ORDER BY appointments.appointment_date DESC, users.username  -- Sort by appointment date in descending order
     """, (session['user_id'], current_date))
+
     past_appointments = cursor.fetchall()
 
     db.close()
@@ -632,7 +709,7 @@ def owner_upcoming_appointments():
     cursor = db.cursor()
     current_date = datetime.now()
 
-    # Fetch upcoming appointments for the shop owner
+    # Fetch upcoming appointments for the shop owner, ordered by appointment_date in ascending order
     cursor.execute("""
         SELECT appointments.appointment_date, appointments.status, users.username, services.service_name, services.price
         FROM appointments
@@ -640,64 +717,12 @@ def owner_upcoming_appointments():
         JOIN services ON appointments.service_id = services.id
         WHERE appointments.shop_id IN (SELECT id FROM shops WHERE owner_id = %s)
         AND appointments.appointment_date >= %s
-        ORDER BY users.username, appointments.appointment_date
+        ORDER BY appointments.appointment_date ASC, users.username
     """, (session['user_id'], current_date))
     upcoming_appointments = cursor.fetchall()
 
     db.close()
     return render_template('owner_upcoming_appointments.html', appointments=upcoming_appointments)
-
-
-# Route for customers to view past appointments
-@app.route('/customer_past_appointments')
-def customer_past_appointments():
-    if 'user_id' not in session or session['role'] != 'customer':
-        return redirect(url_for('login'))
-
-    db = connect_db()
-    cursor = db.cursor()
-    current_date = datetime.now()
-
-    # Fetch past appointments for the customer
-    cursor.execute("""
-        SELECT appointments.appointment_date, appointments.status, shops.name, services.service_name, services.price
-        FROM appointments
-        JOIN shops ON appointments.shop_id = shops.id
-        JOIN services ON appointments.service_id = services.id
-        WHERE appointments.customer_id = %s
-        AND appointments.appointment_date < %s
-        ORDER BY shops.name, appointments.appointment_date
-    """, (session['user_id'], current_date))
-    past_appointments = cursor.fetchall()
-
-    db.close()
-    return render_template('customer_past_appointments.html', appointments=past_appointments)
-
-
-# Route for customers to view upcoming appointments
-@app.route('/customer_upcoming_appointments')
-def customer_upcoming_appointments():
-    if 'user_id' not in session or session['role'] != 'customer':
-        return redirect(url_for('login'))
-
-    db = connect_db()
-    cursor = db.cursor()
-    current_date = datetime.now()
-
-    # Fetch upcoming appointments for the customer
-    cursor.execute("""
-        SELECT appointments.appointment_date, appointments.status, shops.name, services.service_name, services.price
-        FROM appointments
-        JOIN shops ON appointments.shop_id = shops.id
-        JOIN services ON appointments.service_id = services.id
-        WHERE appointments.customer_id = %s
-        AND appointments.appointment_date >= %s
-        ORDER BY shops.name, appointments.appointment_date
-    """, (session['user_id'], current_date))
-    upcoming_appointments = cursor.fetchall()
-
-    db.close()
-    return render_template('customer_upcoming_appointments.html', appointments=upcoming_appointments)
 
 
 @app.route('/admin')
