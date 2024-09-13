@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session, json
+from flask import Flask, render_template, request, redirect, url_for, session, json, flash
 from flask_mail import Mail, Message
 from apscheduler.schedulers.background import BackgroundScheduler
 from datetime import datetime, timedelta
@@ -335,8 +335,16 @@ def dashboard():
     # Shop Owner Dashboard
     elif session['role'] == 'shop_owner':
         # Fetch shops owned by the shop owner
-        cursor.execute("SELECT id, name, address, phone FROM shops WHERE owner_id = %s", (session['user_id'],))
+        cursor.execute("SELECT id, name, address, phone, image FROM shops WHERE owner_id = %s", (session['user_id'],))
         shops = cursor.fetchall()
+
+        print("iam inside the py dashboard shops")
+        for shop in shops:
+            print(f"Shop: {shop[1]}, Image: {shop[4]}")
+
+        # Fetch shops including their image data
+        cursor.execute("SELECT id, name, address, phone, image FROM shops WHERE is_approved = TRUE")
+        shops1 = cursor.fetchall()
 
         # Get current date in YYYY-MM-DD format
         current_date = datetime.now().date()
@@ -360,6 +368,7 @@ def dashboard():
                 'name': shop[1],
                 'address': shop[2],
                 'phone': shop[3],
+                'image': shop[4],
                 'services': [],
                 'appointments': []
             }
@@ -474,7 +483,6 @@ def add_shop():
     return render_template('add_shop.html', translations=translations, lang=language)
 
 
-# Shop list route (For customers)
 @app.route('/shops')
 def shop_list():
     db = connect_db()
@@ -483,6 +491,11 @@ def shop_list():
     cursor.execute("SELECT id, name, address, phone, image FROM shops WHERE is_approved = TRUE")
     shops = cursor.fetchall()
     db.close()
+
+    # Debugging: Print shop data
+    print("iam inside the app.py def shop_list")
+    for shop in shops:
+        print(f"Shop: {shop[1]}, Image: {shop[4]}")  # Print shop name and image path
 
     return render_template('shop_list.html', shops=shops)
 

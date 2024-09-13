@@ -11,24 +11,28 @@
         <h1>{{ translations['available_shops'] }}</h1>
     </header>
     <main>
-    <ul>
+   <ul>
+    {% if shops %}
         {% for shop in shops %}
-        <li>
-            <h3>{{ shop[1] }}</h3> <!-- Shop name -->
-            <p>{{ shop[2] }}</p> <!-- Shop address -->
-            <p>{{ shop[3] }}</p> <!-- Shop phone -->
-
-            <!-- Display the shop image if available -->
-            {% if shop[4] %}
-            <img src="{{ url_for('static', filename='uploads/' + shop[4]) }}" alt="Shop Image" style="width: 100px; height: 100px; object-fit: cover;">
+        <li class="shop-item">
+            <!-- Check if the shop has an image -->
+            {% if shop[4] %} <!-- shop[4] is the image field -->
+            <img src="{{ url_for('static', filename='uploads/' + shop[4]) }}" alt="Shop Image" style="width: 100px; height: 100px; border-radius: 50%;">
             {% else %}
-            <img src="{{ url_for('static', filename='uploads/default_profile.jpg') }}" alt="No Shop Image" style="width: 100px; height: 100px; object-fit: cover;">
+            <img src="{{ url_for('static', filename='uploads/default_profile.jpg') }}" alt="No Shop Image" style="width: 100px; height: 100px; border-radius: 50%;">
             {% endif %}
-
-            <a href="/book/{{ shop[0] }}" class="btn">{{ translations['book_appointment'] }} {{ shop[1] }}</a>
+            <div>
+                <h3>{{ shop[1] }}</h3> <!-- Shop name -->
+                <p>{{ shop[2] }}</p> <!-- Shop address -->
+                <p>{{ shop[3] }}</p> <!-- Shop phone -->
+                <a href="/book/{{ shop[0] }}" class="btn">Book Appointment at {{ shop[1] }}</a>
+            </div>
         </li>
         {% endfor %}
-        </ul>
+    {% else %}
+        <li>No shops available.</li>
+    {% endif %}
+</ul>
         <button type="button" onclick="goBack()">{{ translations['back'] }}</button>
     </main>
     <footer>

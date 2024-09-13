@@ -100,7 +100,8 @@ CREATE TABLE `shops` (
   `address` varchar(255) NOT NULL,
   `phone` varchar(20) DEFAULT NULL,
   `is_approved` tinyint(1) DEFAULT 0,
-  `profile_picture` varchar(255) DEFAULT NULL
+  `profile_picture` varchar(255) DEFAULT NULL,
+  `image` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
